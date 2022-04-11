@@ -1573,7 +1573,7 @@ var PinnedVideo = function PinnedVideo() {
       width: '22vh',
       height: '35vh',
       marginTop: '220px',
-      marginLeft: '380px',
+      marginLeft: '370px',
       borderRadius: '10px'
     }, scrollViewContainer)
   }, React.createElement(MinUidConsumer, null, function (minUsers) {

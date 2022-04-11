@@ -82,7 +82,7 @@ const PinnedVideo: React.FC = () => {
             width: '22vh',
             height: '35vh',
             marginTop: '220px',
-            marginLeft: '380px',
+            marginLeft: '370px',
             borderRadius: '10px'
           },
           ...scrollViewContainer
