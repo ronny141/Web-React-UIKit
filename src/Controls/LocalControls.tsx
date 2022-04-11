@@ -1,5 +1,4 @@
 import React, { useContext } from 'react'
-import EndCall from './Local/EndCall'
 import LocalAudioMute from './Local/LocalAudioMute'
 import LocalVideoMute from './Local/LocalVideoMute'
 import PropsContext from '../PropsContext'
