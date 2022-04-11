@@ -1568,7 +1568,10 @@ var PinnedVideo = function PinnedVideo() {
       flexDirection: isLandscape ? 'column' : 'row',
       position: 'absolute',
       width: '22vh',
-      height: '35vh'
+      height: '35vh',
+      marginTop: '220px',
+      marginLeft: '380px',
+      borderRadius: '10px'
     }, scrollViewContainer)
   }, React__default.createElement(MinUidConsumer, null, function (minUsers) {
     return minUsers.map(function (user) {
@@ -1576,7 +1579,6 @@ var PinnedVideo = function PinnedVideo() {
         style: _extends({}, {
           minHeight: '35vh',
           minWidth: '25vh',
-          margin: 2,
           display: 'flex',
           position: 'absolute',
           width: '25vh'

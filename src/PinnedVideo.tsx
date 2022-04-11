@@ -80,7 +80,10 @@ const PinnedVideo: React.FC = () => {
             flexDirection: isLandscape ? 'column' : 'row',
             position: 'absolute',
             width: '22vh',
-            height: '35vh'
+            height: '35vh',
+            marginTop: '220px',
+            marginLeft: '380px',
+            borderRadius: '10px'
           },
           ...scrollViewContainer
         }}
@@ -94,7 +97,6 @@ const PinnedVideo: React.FC = () => {
                     ...{
                       minHeight: '35vh',
                       minWidth: '25vh',
-                      margin: 2,
                       display: 'flex',
                       position: 'absolute',
                       width: '25vh'
