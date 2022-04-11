@@ -2,46 +2,9 @@ import React, { useRef, useContext, useState, useReducer, useEffect, createConte
 import AgoraRTC, { createClient, AgoraVideoPlayer, createMicrophoneAndCameraTracks } from 'agora-rtc-react';
 import AgoraRTM, { createLazyChannel, createLazyClient } from 'agora-rtm-react';
 
-function _extends() {
-  _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-
-  return _extends.apply(this, arguments);
-}
-
-// A type of promise-like that resolves synchronously and supports only one observer
-
-const _iteratorSymbol = /*#__PURE__*/ typeof Symbol !== "undefined" ? (Symbol.iterator || (Symbol.iterator = Symbol("Symbol.iterator"))) : "@@iterator";
-
-const _asyncIteratorSymbol = /*#__PURE__*/ typeof Symbol !== "undefined" ? (Symbol.asyncIterator || (Symbol.asyncIterator = Symbol("Symbol.asyncIterator"))) : "@@asyncIterator";
-
-// Asynchronously call a function and send errors to recovery continuation
-function _catch(body, recover) {
-	try {
-		var result = body();
-	} catch(e) {
-		return recover(e);
-	}
-	if (result && result.then) {
-		return result.then(void 0, recover);
-	}
-	return result;
-}
-
-var RtcContext = React.createContext({});
-var RtcProvider = RtcContext.Provider;
-var RtcConsumer = RtcContext.Consumer;
+const RtcContext = React.createContext({});
+const RtcProvider = RtcContext.Provider;
+const RtcConsumer = RtcContext.Consumer;
 
 var remoteTrackState;
 
@@ -67,7 +30,7 @@ var ToggleState;
   ToggleState[ToggleState["enabling"] = 3] = "enabling";
 })(ToggleState || (ToggleState = {}));
 
-var initialValue = {
+const initialValue = {
   rtcProps: {
     appId: '',
     channel: '',
@@ -75,21 +38,21 @@ var initialValue = {
   },
   rtmProps: {}
 };
-var PropsContext = React.createContext(initialValue);
-var PropsProvider = PropsContext.Provider;
+const PropsContext = React.createContext(initialValue);
+const PropsProvider = PropsContext.Provider;
 
-var MaxUidContext = React.createContext([]);
-var MaxUidProvider = MaxUidContext.Provider;
-var MaxUidConsumer = MaxUidContext.Consumer;
+const MaxUidContext = React.createContext([]);
+const MaxUidProvider = MaxUidContext.Provider;
+const MaxUidConsumer = MaxUidContext.Consumer;
 
-var MinUidContext = React.createContext([]);
-var MinUidProvider = MinUidContext.Provider;
-var MinUidConsumer = MinUidContext.Consumer;
+const MinUidContext = React.createContext([]);
+const MinUidProvider = MinUidContext.Provider;
+const MinUidConsumer = MinUidContext.Consumer;
 
-var TracksContext = React.createContext({});
-var TracksProvider = TracksContext.Provider;
+const TracksContext = React.createContext({});
+const TracksProvider = TracksContext.Provider;
 
-var initState = {
+const initState = {
   max: [{
     uid: 0,
     hasAudio: remoteTrackState.no,
@@ -98,17 +61,15 @@ var initState = {
   min: []
 };
 
-var reducer = function reducer(state, action) {
-  var stateUpdate = initState;
-  var uids = [].concat(state.max, state.min).map(function (u) {
-    return u.uid;
-  });
+const reducer = (state, action) => {
+  let stateUpdate = initState;
+  const uids = [...state.max, ...state.min].map(u => u.uid);
 
   switch (action.type) {
     case 'update-user-video':
       {
         stateUpdate = {
-          min: state.min.map(function (user) {
+          min: state.min.map(user => {
             if (user.uid === 0) {
               return {
                 uid: 0,
@@ -119,7 +80,7 @@ var reducer = function reducer(state, action) {
               return user;
             }
           }),
-          max: state.max.map(function (user) {
+          max: state.max.map(user => {
             if (user.uid === 0) {
               return {
                 uid: 0,
@@ -138,11 +99,11 @@ var reducer = function reducer(state, action) {
     case 'user-joined':
       {
         if (uids.indexOf(action.value[0].uid) === -1) {
-          var minUpdate = [].concat(state.min, [{
+          const minUpdate = [...state.min, {
             uid: action.value[0].uid,
             hasAudio: remoteTrackState.no,
             hasVideo: remoteTrackState.no
-          }]);
+          }];
 
           if (minUpdate.length === 1 && state.max[0].uid === 0) {
             stateUpdate = {
@@ -172,21 +133,16 @@ var reducer = function reducer(state, action) {
             min: state.min
           };
         } else {
-          var UIKitUser = state.min.find(function (user) {
-            return user.uid === action.value[0].uid;
-          });
+          const UIKitUser = state.min.find(user => user.uid === action.value[0].uid);
 
           if (UIKitUser) {
-            var _minUpdate = [].concat(state.min.filter(function (user) {
-              return user.uid !== action.value[0].uid;
-            }), [{
+            const minUpdate = [...state.min.filter(user => user.uid !== action.value[0].uid), {
               uid: action.value[0].uid,
               hasAudio: action.value[1] === 'audio' ? remoteTrackState.no : UIKitUser.hasAudio,
               hasVideo: action.value[1] === 'video' ? remoteTrackState.no : UIKitUser.hasVideo
-            }]);
-
+            }];
             stateUpdate = {
-              min: _minUpdate,
+              min: minUpdate,
               max: state.max
             };
           }
@@ -208,7 +164,7 @@ var reducer = function reducer(state, action) {
           };
         } else {
           stateUpdate = {
-            min: state.min.map(function (user) {
+            min: state.min.map(user => {
               if (user.uid !== action.value[0].uid) {
                 return user;
               } else {
@@ -229,17 +185,14 @@ var reducer = function reducer(state, action) {
     case 'user-left':
       {
         if (state.max[0].uid === action.value[0].uid) {
-          var _minUpdate2 = [].concat(state.min);
-
+          const minUpdate = [...state.min];
           stateUpdate = {
-            max: [_minUpdate2.pop()],
-            min: _minUpdate2
+            max: [minUpdate.pop()],
+            min: minUpdate
           };
         } else {
           stateUpdate = {
-            min: state.min.filter(function (user) {
-              return user.uid !== action.value[0].uid;
-            }),
+            min: state.min.filter(user => user.uid !== action.value[0].uid),
             max: state.max
           };
         }
@@ -252,9 +205,7 @@ var reducer = function reducer(state, action) {
         if (state.max[0].uid === action.value[0].uid) ; else {
           stateUpdate = {
             max: [action.value[0]],
-            min: [].concat(state.min.filter(function (user) {
-              return user.uid !== action.value[0].uid;
-            }), [state.max[0]])
+            min: [...state.min.filter(user => user.uid !== action.value[0].uid), state.max[0]]
           };
         }
       }
@@ -264,7 +215,7 @@ var reducer = function reducer(state, action) {
     case 'local-user-mute-video':
       {
         stateUpdate = {
-          min: state.min.map(function (user) {
+          min: state.min.map(user => {
             if (user.uid === 0) {
               return {
                 uid: 0,
@@ -275,7 +226,7 @@ var reducer = function reducer(state, action) {
               return user;
             }
           }),
-          max: state.max.map(function (user) {
+          max: state.max.map(user => {
             if (user.uid === 0) {
               return {
                 uid: 0,
@@ -294,7 +245,7 @@ var reducer = function reducer(state, action) {
     case 'local-user-mute-audio':
       {
         stateUpdate = {
-          min: state.min.map(function (user) {
+          min: state.min.map(user => {
             if (user.uid === 0) {
               return {
                 uid: 0,
@@ -305,7 +256,7 @@ var reducer = function reducer(state, action) {
               return user;
             }
           }),
-          max: state.max.map(function (user) {
+          max: state.max.map(user => {
             if (user.uid === 0) {
               return {
                 uid: 0,
@@ -324,7 +275,7 @@ var reducer = function reducer(state, action) {
     case 'remote-user-mute-video':
       {
         stateUpdate = {
-          min: state.min.map(function (user) {
+          min: state.min.map(user => {
             if (user.uid === action.value[0].uid) {
               return {
                 uid: user.uid,
@@ -333,7 +284,7 @@ var reducer = function reducer(state, action) {
               };
             } else return user;
           }),
-          max: state.max.map(function (user) {
+          max: state.max.map(user => {
             if (user.uid === action.value[0].uid) return {
               uid: user.uid,
               hasVideo: action.value[1],
@@ -348,14 +299,14 @@ var reducer = function reducer(state, action) {
     case 'remote-user-mute-audio':
       {
         stateUpdate = {
-          min: state.min.map(function (user) {
+          min: state.min.map(user => {
             if (user.uid === action.value[0].uid) return {
               uid: user.uid,
               hasAudio: action.value[1],
               hasVideo: user.hasVideo
             };else return user;
           }),
-          max: state.max.map(function (user) {
+          max: state.max.map(user => {
             if (user.uid === action.value[0].uid) return {
               uid: user.uid,
               hasAudio: action.value[1],
@@ -374,15 +325,12 @@ var reducer = function reducer(state, action) {
     case 'ActiveSpeaker':
       {
         if (state.max[0].uid === action.value[0]) {
-          stateUpdate = _extends({}, state);
+          stateUpdate = { ...state
+          };
         } else {
           stateUpdate = {
-            max: [state.min.find(function (user) {
-              return user.uid === action.value[0];
-            })],
-            min: [].concat(state.min.filter(function (user) {
-              return user.uid !== action.value[0];
-            }), [state.max[0]])
+            max: [state.min.find(user => user.uid === action.value[0])],
+            min: [...state.min.filter(user => user.uid !== action.value[0]), state.max[0]]
           };
         }
       }
@@ -390,304 +338,211 @@ var reducer = function reducer(state, action) {
       break;
   }
 
-  return _extends({}, state, stateUpdate);
+  return { ...state,
+    ...stateUpdate
+  };
 };
 
-var useClient = createClient({
+const useClient = createClient({
   codec: 'vp8',
   mode: 'live'
 });
 
-var RtcConfigure = function RtcConfigure(props) {
-  var uid = useRef();
-
-  var _useContext = useContext(TracksContext),
-      localVideoTrack = _useContext.localVideoTrack,
-      localAudioTrack = _useContext.localAudioTrack;
-
-  var _useContext2 = useContext(PropsContext),
-      callbacks = _useContext2.callbacks,
-      rtcProps = _useContext2.rtcProps;
-
-  var _useState = useState(false),
-      ready = _useState[0],
-      setReady = _useState[1];
-
-  var _useState2 = useState(false),
-      channelJoined = _useState2[0],
-      setChannelJoined = _useState2[1];
-
-  var joinRes = null;
-  var canJoin = useRef(new Promise(function (resolve, reject) {
+const RtcConfigure = props => {
+  const uid = useRef();
+  const {
+    localVideoTrack,
+    localAudioTrack
+  } = useContext(TracksContext);
+  const {
+    callbacks,
+    rtcProps
+  } = useContext(PropsContext);
+  const [ready, setReady] = useState(false);
+  const [channelJoined, setChannelJoined] = useState(false);
+  let joinRes = null;
+  const canJoin = useRef(new Promise((resolve, reject) => {
     joinRes = resolve;
     console.log(reject);
   }));
-  var client = useClient();
+  let client = useClient();
 
   if (rtcProps.customRtcClient) {
     client.removeAllListeners();
     client = rtcProps.customRtcClient;
   }
 
-  var localVideoTrackHasPublished = false;
-  var localAudioTrackHasPublished = false;
-  var mediaStore = useRef({});
-  var callActive = props.callActive;
+  let localVideoTrackHasPublished = false;
+  let localAudioTrackHasPublished = false;
+  const mediaStore = useRef({});
+  let {
+    callActive
+  } = props;
 
   if (callActive === undefined) {
     callActive = true;
   }
 
-  var _useReducer = useReducer(reducer, initState),
-      uidState = _useReducer[0],
-      dispatch = _useReducer[1];
-
-  useEffect(function () {
-    var init = function init() {
+  const [uidState, dispatch] = useReducer(reducer, initState);
+  useEffect(() => {
+    async function init() {
       try {
-        try {
-          console.log(client);
-          client.on('user-joined', function () {
-            try {
-              for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-                args[_key] = arguments[_key];
-              }
-
-              var remoteUser = args[0];
-              mediaStore.current[remoteUser.uid] = {};
-              dispatch({
-                type: 'user-joined',
-                value: args
-              });
-              return Promise.resolve();
-            } catch (e) {
-              return Promise.reject(e);
-            }
+        console.log(client);
+        client.on('user-joined', async (...args) => {
+          const [remoteUser] = args;
+          mediaStore.current[remoteUser.uid] = {};
+          dispatch({
+            type: 'user-joined',
+            value: args
           });
-          client.on('user-published', function () {
-            for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-              args[_key2] = arguments[_key2];
-            }
+        });
+        client.on('user-published', async (...args) => {
+          const [remoteUser, mediaType] = args;
+          console.log('user-published', remoteUser.uid);
+          client.subscribe(remoteUser, mediaType).then(_e => {
+            mediaStore.current[remoteUser.uid][mediaType + 'Track'] = remoteUser[mediaType + 'Track'];
 
-            try {
-              var remoteUser = args[0],
-                  mediaType = args[1];
-              console.log('user-published', remoteUser.uid);
-              client.subscribe(remoteUser, mediaType).then(function (_e) {
-                mediaStore.current[remoteUser.uid][mediaType + 'Track'] = remoteUser[mediaType + 'Track'];
+            if (mediaType === 'audio') {
+              var _remoteUser$audioTrac;
 
-                if (mediaType === 'audio') {
-                  var _remoteUser$audioTrac;
-
-                  (_remoteUser$audioTrac = remoteUser.audioTrack) === null || _remoteUser$audioTrac === void 0 ? void 0 : _remoteUser$audioTrac.play();
-                } else {
-                  if (rtcProps.enableDualStream && rtcProps.dualStreamMode) {
-                    client.setStreamFallbackOption(remoteUser.uid, rtcProps.dualStreamMode);
-                  }
-                }
-
-                dispatch({
-                  type: 'user-published',
-                  value: args
-                });
-              })["catch"](function (e) {
-                return console.log(e);
-              });
-              return Promise.resolve();
-            } catch (e) {
-              return Promise.reject(e);
-            }
-          });
-          client.on('user-unpublished', function () {
-            try {
-              for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-                args[_key3] = arguments[_key3];
+              (_remoteUser$audioTrac = remoteUser.audioTrack) === null || _remoteUser$audioTrac === void 0 ? void 0 : _remoteUser$audioTrac.play();
+            } else {
+              if (rtcProps.enableDualStream && rtcProps.dualStreamMode) {
+                client.setStreamFallbackOption(remoteUser.uid, rtcProps.dualStreamMode);
               }
-
-              var remoteUser = args[0],
-                  mediaType = args[1];
-              console.log('user-unpublished', remoteUser.uid);
-
-              if (mediaType === 'audio') {
-                var _remoteUser$audioTrac2;
-
-                (_remoteUser$audioTrac2 = remoteUser.audioTrack) === null || _remoteUser$audioTrac2 === void 0 ? void 0 : _remoteUser$audioTrac2.stop();
-              }
-
-              dispatch({
-                type: 'user-unpublished',
-                value: args
-              });
-              return Promise.resolve();
-            } catch (e) {
-              return Promise.reject(e);
-            }
-          });
-          client.on('connection-state-change', function () {
-            try {
-              for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
-                args[_key4] = arguments[_key4];
-              }
-
-              var curState = args[0],
-                  prevState = args[1],
-                  reason = args[2];
-              console.log('connection', prevState, curState, reason);
-
-              if (curState === 'CONNECTED') {
-                setChannelJoined(true);
-              } else if (curState === 'DISCONNECTED') {
-                dispatch({
-                  type: 'leave-channel',
-                  value: null
-                });
-              } else {
-                setChannelJoined(false);
-              }
-
-              return Promise.resolve();
-            } catch (e) {
-              return Promise.reject(e);
-            }
-          });
-          client.on('user-left', function () {
-            for (var _len5 = arguments.length, args = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
-              args[_key5] = arguments[_key5];
             }
 
             dispatch({
-              type: 'user-left',
+              type: 'user-published',
               value: args
             });
+          }).catch(e => console.log(e));
+        });
+        client.on('user-unpublished', async (...args) => {
+          const [remoteUser, mediaType] = args;
+          console.log('user-unpublished', remoteUser.uid);
+
+          if (mediaType === 'audio') {
+            var _remoteUser$audioTrac2;
+
+            (_remoteUser$audioTrac2 = remoteUser.audioTrack) === null || _remoteUser$audioTrac2 === void 0 ? void 0 : _remoteUser$audioTrac2.stop();
+          }
+
+          dispatch({
+            type: 'user-unpublished',
+            value: args
           });
+        });
+        client.on('connection-state-change', async (...args) => {
+          const [curState, prevState, reason] = args;
+          console.log('connection', prevState, curState, reason);
 
-          if (rtcProps.tokenUrl) {
-            var tokenUrl = rtcProps.tokenUrl,
-                channel = rtcProps.channel,
-                _uid = rtcProps.uid;
-            client.on('token-privilege-will-expire', function () {
-              try {
-                console.log('token will expire');
-                return Promise.resolve(fetch(tokenUrl + '/rtc/' + channel + '/publisher/uid/' + (_uid || 0) + '/')).then(function (res) {
-                  return Promise.resolve(res.json()).then(function (data) {
-                    var token = data.rtcToken;
-                    client.renewToken(token);
-                  });
-                });
-              } catch (e) {
-                return Promise.reject(e);
-              }
+          if (curState === 'CONNECTED') {
+            setChannelJoined(true);
+          } else if (curState === 'DISCONNECTED') {
+            dispatch({
+              type: 'leave-channel',
+              value: null
             });
-            client.on('token-privilege-did-expire', function () {
-              try {
-                return Promise.resolve(fetch(tokenUrl + '/rtc/' + channel + '/publisher/uid/' + (_uid || 0) + '/')).then(function (res) {
-                  return Promise.resolve(res.json()).then(function (data) {
-                    var token = data.rtcToken;
-                    client.renewToken(token);
-                  });
-                });
-              } catch (e) {
-                return Promise.reject(e);
-              }
-            });
+          } else {
+            setChannelJoined(false);
           }
+        });
+        client.on('user-left', (...args) => {
+          dispatch({
+            type: 'user-left',
+            value: args
+          });
+        });
 
-          if (callbacks) {
-            var events = Object.keys(callbacks);
-            events.map(function (e) {
-              try {
-                client.on(e, function () {
-                  ;
-
-                  for (var _len6 = arguments.length, args = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
-                    args[_key6] = arguments[_key6];
-                  }
-
-                  callbacks[e].apply(null, args);
-                });
-              } catch (e) {
-                console.log(e);
-              }
-            });
-          }
-
-          ;
-          joinRes(true);
-          setReady(true);
-        } catch (e) {
-          console.log(e);
+        if (rtcProps.tokenUrl) {
+          const {
+            tokenUrl,
+            channel,
+            uid
+          } = rtcProps;
+          client.on('token-privilege-will-expire', async () => {
+            console.log('token will expire');
+            const res = await fetch(tokenUrl + '/rtc/' + channel + '/publisher/uid/' + (uid || 0) + '/');
+            const data = await res.json();
+            const token = data.rtcToken;
+            client.renewToken(token);
+          });
+          client.on('token-privilege-did-expire', async () => {
+            const res = await fetch(tokenUrl + '/rtc/' + channel + '/publisher/uid/' + (uid || 0) + '/');
+            const data = await res.json();
+            const token = data.rtcToken;
+            client.renewToken(token);
+          });
         }
 
-        return Promise.resolve();
+        if (callbacks) {
+          const events = Object.keys(callbacks);
+          events.map(e => {
+            try {
+              client.on(e, (...args) => {
+                ;
+                callbacks[e].apply(null, args);
+              });
+            } catch (e) {
+              console.log(e);
+            }
+          });
+        }
+
+        ;
+        joinRes(true);
+        setReady(true);
       } catch (e) {
-        return Promise.reject(e);
+        console.log(e);
       }
-    };
+    }
 
     if (joinRes) {
       init();
-      return function () {
+      return () => {
         try {
           client.removeAllListeners();
         } catch (e) {
           console.log(e);
         }
       };
-    } else return function () {};
+    } else return () => {};
   }, [rtcProps.appId]);
-  useEffect(function () {
-    var join = function join() {
-      try {
-        return Promise.resolve(canJoin.current).then(function () {
-          var tokenUrl = rtcProps.tokenUrl,
-              channel = rtcProps.channel,
-              userUid = rtcProps.uid,
-              appId = rtcProps.appId,
-              token = rtcProps.token;
+  useEffect(() => {
+    async function join() {
+      await canJoin.current;
+      const {
+        tokenUrl,
+        channel,
+        uid: userUid,
+        appId,
+        token
+      } = rtcProps;
 
-          var _temp3 = function () {
-            if (client) {
-              if (rtcProps.role === 'audience') {
-                client.setClientRole(rtcProps.role);
-              } else {
-                client.setClientRole('host');
-              }
+      if (client) {
+        if (rtcProps.role === 'audience') {
+          client.setClientRole(rtcProps.role);
+        } else {
+          client.setClientRole('host');
+        }
 
-              var _temp4 = function () {
-                if (tokenUrl) {
-                  var _temp5 = _catch(function () {
-                    return Promise.resolve(fetch(tokenUrl + '/rtc/' + channel + '/publisher/uid/' + (userUid || 0) + '/')).then(function (res) {
-                      return Promise.resolve(res.json()).then(function (data) {
-                        var token = data.rtcToken;
-                        return Promise.resolve(client.join(appId, channel, token, userUid || 0)).then(function (_client$join) {
-                          uid.current = _client$join;
-                        });
-                      });
-                    });
-                  }, function (e) {
-                    console.log(e);
-                  });
-
-                  if (_temp5 && _temp5.then) return _temp5.then(function () {});
-                } else {
-                  return Promise.resolve(client.join(appId, channel, token || null, userUid || 0)).then(function (_client$join2) {
-                    uid.current = _client$join2;
-                  });
-                }
-              }();
-
-              if (_temp4 && _temp4.then) return _temp4.then(function () {});
-            } else {
-              console.error('trying to join before RTC Engine was initialized');
-            }
-          }();
-
-          if (_temp3 && _temp3.then) return _temp3.then(function () {});
-        });
-      } catch (e) {
-        return Promise.reject(e);
+        if (tokenUrl) {
+          try {
+            const res = await fetch(tokenUrl + '/rtc/' + channel + '/publisher/uid/' + (userUid || 0) + '/');
+            const data = await res.json();
+            const _token = data.rtcToken;
+            uid.current = await client.join(appId, channel, _token, userUid || 0);
+          } catch (e) {
+            console.log(e);
+          }
+        } else {
+          uid.current = await client.join(appId, channel, token || null, userUid || 0);
+        }
+      } else {
+        console.error('trying to join before RTC Engine was initialized');
       }
-    };
+    }
 
     if (callActive) {
       join();
@@ -696,65 +551,35 @@ var RtcConfigure = function RtcConfigure(props) {
       console.log('In precall - waiting to join');
     }
 
-    return function () {
+    return () => {
       if (callActive) {
         console.log('Leaving channel');
-        canJoin.current = client.leave()["catch"](function (err) {
-          return console.log(err);
-        });
+        canJoin.current = client.leave().catch(err => console.log(err));
       }
     };
   }, [rtcProps.channel, rtcProps.uid, callActive, rtcProps.tokenUrl]);
-  useEffect(function () {
-    var publish = function publish() {
-      try {
-        var _temp15 = function _temp15() {
-          function _temp10() {
-            var _temp8 = function () {
-              if (localVideoTrack !== null && localVideoTrack !== void 0 && localVideoTrack.enabled && channelJoined) {
-                var _temp13 = function () {
-                  if (!localVideoTrackHasPublished) {
-                    return Promise.resolve(client.publish([localVideoTrack]).then(function () {
-                      localVideoTrackHasPublished = true;
-                    })).then(function () {});
-                  }
-                }();
-
-                if (_temp13 && _temp13.then) return _temp13.then(function () {});
-              }
-            }();
-
-            if (_temp8 && _temp8.then) return _temp8.then(function () {});
-          }
-
-          var _temp9 = function () {
-            if (localAudioTrack !== null && localAudioTrack !== void 0 && localAudioTrack.enabled && channelJoined) {
-              var _temp14 = function () {
-                if (!localAudioTrackHasPublished) {
-                  return Promise.resolve(client.publish([localAudioTrack]).then(function () {
-                    localAudioTrackHasPublished = true;
-                  })).then(function () {});
-                }
-              }();
-
-              if (_temp14 && _temp14.then) return _temp14.then(function () {});
-            }
-          }();
-
-          return _temp9 && _temp9.then ? _temp9.then(_temp10) : _temp10(_temp9);
-        };
-
-        var _temp16 = function () {
-          if (rtcProps.enableDualStream) {
-            return Promise.resolve(client.enableDualStream()).then(function () {});
-          }
-        }();
-
-        return Promise.resolve(_temp16 && _temp16.then ? _temp16.then(_temp15) : _temp15(_temp16));
-      } catch (e) {
-        return Promise.reject(e);
+  useEffect(() => {
+    async function publish() {
+      if (rtcProps.enableDualStream) {
+        await client.enableDualStream();
       }
-    };
+
+      if (localAudioTrack !== null && localAudioTrack !== void 0 && localAudioTrack.enabled && channelJoined) {
+        if (!localAudioTrackHasPublished) {
+          await client.publish([localAudioTrack]).then(() => {
+            localAudioTrackHasPublished = true;
+          });
+        }
+      }
+
+      if (localVideoTrack !== null && localVideoTrack !== void 0 && localVideoTrack.enabled && channelJoined) {
+        if (!localVideoTrackHasPublished) {
+          await client.publish([localVideoTrack]).then(() => {
+            localVideoTrackHasPublished = true;
+          });
+        }
+      }
+    }
 
     console.log('Publish', localVideoTrack, localAudioTrack, callActive);
 
@@ -762,7 +587,7 @@ var RtcConfigure = function RtcConfigure(props) {
       publish();
     }
   }, [callActive, localVideoTrack === null || localVideoTrack === void 0 ? void 0 : localVideoTrack.enabled, localAudioTrack === null || localAudioTrack === void 0 ? void 0 : localAudioTrack.enabled, channelJoined]);
-  useEffect(function () {
+  useEffect(() => {
     if (localVideoTrack && localAudioTrack !== (null )) {
       mediaStore.current[0] = {
         audioTrack: localAudioTrack,
@@ -774,74 +599,62 @@ var RtcConfigure = function RtcConfigure(props) {
       });
     }
   }, [rtcProps.channel, channelJoined]);
-  useEffect(function () {
+  useEffect(() => {
     if (channelJoined && rtcProps.token) {
-      client.renewToken(rtcProps.token).then(function (e) {
-        return console.log('renewed token', e);
-      });
+      client.renewToken(rtcProps.token).then(e => console.log('renewed token', e));
     }
   }, [rtcProps.token, channelJoined]);
-  useEffect(function () {
+  useEffect(() => {
     if (rtcProps.role) {
-      client.setClientRole(rtcProps.role).then(function (e) {
-        return console.log('changed role', e);
-      });
+      client.setClientRole(rtcProps.role).then(e => console.log('changed role', e));
     }
   }, [rtcProps.role, channelJoined]);
-  useEffect(function () {
-    var enableActiveSpeaker = function enableActiveSpeaker() {
-      try {
-        var _temp18 = function () {
-          if (rtcProps.activeSpeaker && rtcProps.layout !== layout.grid) {
-            client.on('volume-indicator', function (volumes) {
-              var highestvolumeObj = volumes.reduce(function (highestVolume, volume) {
-                if (highestVolume === null) {
-                  return volume;
-                } else {
-                  if (volume.level > highestVolume.level) {
-                    return volume;
-                  }
-
-                  return highestVolume;
-                }
-              }, null);
-              var activeSpeaker = highestvolumeObj ? highestvolumeObj.uid : undefined;
-              var mapActiveSpeakerToZero = activeSpeaker === uid.current ? 0 : activeSpeaker;
-
-              if (activeSpeaker !== undefined) {
-                dispatch({
-                  type: 'ActiveSpeaker',
-                  value: [mapActiveSpeakerToZero]
-                });
+  useEffect(() => {
+    async function enableActiveSpeaker() {
+      if (rtcProps.activeSpeaker && rtcProps.layout !== layout.grid) {
+        client.on('volume-indicator', volumes => {
+          const highestvolumeObj = volumes.reduce((highestVolume, volume) => {
+            if (highestVolume === null) {
+              return volume;
+            } else {
+              if (volume.level > highestVolume.level) {
+                return volume;
               }
-            });
-            return Promise.resolve(client.enableAudioVolumeIndicator()).then(function () {});
-          }
-        }();
 
-        return Promise.resolve(_temp18 && _temp18.then ? _temp18.then(function () {}) : void 0);
-      } catch (e) {
-        return Promise.reject(e);
+              return highestVolume;
+            }
+          }, null);
+          const activeSpeaker = highestvolumeObj ? highestvolumeObj.uid : undefined;
+          const mapActiveSpeakerToZero = activeSpeaker === uid.current ? 0 : activeSpeaker;
+
+          if (activeSpeaker !== undefined) {
+            dispatch({
+              type: 'ActiveSpeaker',
+              value: [mapActiveSpeakerToZero]
+            });
+          }
+        });
+        await client.enableAudioVolumeIndicator();
       }
-    };
+    }
 
     if (callActive) {
       enableActiveSpeaker();
     }
 
-    return function () {
+    return () => {
       client.removeAllListeners('volume-indicator');
     };
   }, [rtcProps.activeSpeaker, rtcProps.layout]);
   return React.createElement(RtcProvider, {
     value: {
-      client: client,
+      client,
       mediaStore: mediaStore.current,
-      localVideoTrack: localVideoTrack,
-      localAudioTrack: localAudioTrack,
-      dispatch: dispatch,
+      localVideoTrack,
+      localAudioTrack,
+      dispatch,
       localUid: uid,
-      channelJoined: channelJoined
+      channelJoined
     }
   }, React.createElement(MaxUidProvider, {
     value: uidState.max
@@ -850,7 +663,7 @@ var RtcConfigure = function RtcConfigure(props) {
   }, ready ? props.children : null)));
 };
 
-var icons = {
+const icons = {
   videocam: React.createElement(React.Fragment, null, React.createElement("polygon", {
     points: '23 7 16 12 23 17 23 7'
   }), React.createElement("rect", {
@@ -929,36 +742,40 @@ var icons = {
   }))
 };
 
-var BtnTemplate = function BtnTemplate(props) {
-  var onClick = props.onClick,
-      name = props.name,
-      disabled = props.disabled,
-      style = props.style;
-
-  var _useContext = useContext(PropsContext),
-      styleProps = _useContext.styleProps;
-
-  var _ref = styleProps || {},
-      theme = _ref.theme,
-      BtnTemplateStyles = _ref.BtnTemplateStyles,
-      iconSize = _ref.iconSize,
-      customIcon = _ref.customIcon;
-
+const BtnTemplate = props => {
+  const {
+    onClick,
+    name,
+    disabled,
+    style
+  } = props;
+  const {
+    styleProps
+  } = useContext(PropsContext);
+  const {
+    theme,
+    BtnTemplateStyles,
+    iconSize,
+    customIcon
+  } = styleProps || {};
   return React.createElement("div", {
-    style: _extends({}, {
-      width: 35,
-      height: 35,
-      borderRadius: '100%',
-      borderWidth: 2,
-      borderStyle: 'solid',
-      borderColor: 'yellow',
-      backgroundColor: 'rgba(0,80,180,0.2)',
-      alignItems: 'center',
-      justifyContent: 'center',
-      display: 'flex',
-      cursor: disabled ? 'auto' : 'pointer',
-      margin: 4
-    }, BtnTemplateStyles, style),
+    style: { ...{
+        width: 35,
+        height: 35,
+        borderRadius: '100%',
+        borderWidth: 2,
+        borderStyle: 'solid',
+        borderColor: 'yellow',
+        backgroundColor: 'rgba(0,80,180,0.2)',
+        alignItems: 'center',
+        justifyContent: 'center',
+        display: 'flex',
+        cursor: disabled ? 'auto' : 'pointer',
+        margin: 4
+      },
+      ...BtnTemplateStyles,
+      ...style
+    },
     onClick: onClick
   }, customIcon ? React.createElement("img", {
     src: customIcon[name],
@@ -981,19 +798,17 @@ var BtnTemplate = function BtnTemplate(props) {
   }, icons[name]));
 };
 
-var LocalContext = createContext({});
+const LocalContext = createContext({});
 
-var LocalUserContext = function LocalUserContext(props) {
-  var max = useContext(MaxUidContext);
-  var min = useContext(MinUidContext);
-  var localUser;
+const LocalUserContext = props => {
+  const max = useContext(MaxUidContext);
+  const min = useContext(MinUidContext);
+  let localUser;
 
   if (max[0].uid === 0) {
     localUser = max[0];
   } else {
-    localUser = min.find(function (u) {
-      return u.uid === 0;
-    });
+    localUser = min.find(u => u.uid === 0);
   }
 
   return React.createElement(LocalContext.Provider, {
@@ -1001,154 +816,122 @@ var LocalUserContext = function LocalUserContext(props) {
   }, props.children);
 };
 
-var muteAudio = (function (user, dispatch, localAudioTrack) {
-  try {
-    var _temp4 = function () {
-      if (user.uid === 0) {
-        var localState = user.hasAudio;
+var muteAudio = (async (user, dispatch, localAudioTrack) => {
+  if (user.uid === 0) {
+    const localState = user.hasAudio;
 
-        var _temp5 = function () {
-          if (localState === ToggleState.enabled || localState === ToggleState.disabled) {
-            dispatch({
-              type: 'local-user-mute-audio',
-              value: [localState === ToggleState.enabled ? ToggleState.disabling : ToggleState.enabling]
-            });
+    if (localState === ToggleState.enabled || localState === ToggleState.disabled) {
+      dispatch({
+        type: 'local-user-mute-audio',
+        value: [localState === ToggleState.enabled ? ToggleState.disabling : ToggleState.enabling]
+      });
 
-            var _temp6 = _catch(function () {
-              return Promise.resolve(localAudioTrack === null || localAudioTrack === void 0 ? void 0 : localAudioTrack.setEnabled(localState !== ToggleState.enabled)).then(function () {
-                dispatch({
-                  type: 'local-user-mute-audio',
-                  value: [localState === ToggleState.enabled ? ToggleState.disabled : ToggleState.enabled]
-                });
-              });
-            }, function () {
-              dispatch({
-                type: 'local-user-mute-audio',
-                value: [localState]
-              });
-            });
-
-            if (_temp6 && _temp6.then) return _temp6.then(function () {});
-          }
-        }();
-
-        if (_temp5 && _temp5.then) return _temp5.then(function () {});
+      try {
+        await (localAudioTrack === null || localAudioTrack === void 0 ? void 0 : localAudioTrack.setEnabled(localState !== ToggleState.enabled));
+        dispatch({
+          type: 'local-user-mute-audio',
+          value: [localState === ToggleState.enabled ? ToggleState.disabled : ToggleState.enabled]
+        });
+      } catch (e) {
+        dispatch({
+          type: 'local-user-mute-audio',
+          value: [localState]
+        });
       }
-    }();
-
-    return Promise.resolve(_temp4 && _temp4.then ? _temp4.then(function () {}) : void 0);
-  } catch (e) {
-    return Promise.reject(e);
+    }
   }
 });
 
 function LocalAudioMute() {
-  var _useContext = useContext(PropsContext),
-      styleProps = _useContext.styleProps;
-
-  var _ref = styleProps || {},
-      localBtnStyles = _ref.localBtnStyles;
-
-  var _ref2 = localBtnStyles || {},
-      muteLocalAudio = _ref2.muteLocalAudio;
-
-  var _useContext2 = useContext(RtcContext),
-      dispatch = _useContext2.dispatch,
-      localAudioTrack = _useContext2.localAudioTrack;
-
-  var local = useContext(LocalContext);
+  const {
+    styleProps
+  } = useContext(PropsContext);
+  const {
+    localBtnStyles
+  } = styleProps || {};
+  const {
+    muteLocalAudio
+  } = localBtnStyles || {};
+  const {
+    dispatch,
+    localAudioTrack
+  } = useContext(RtcContext);
+  const local = useContext(LocalContext);
   return React.createElement("div", null, React.createElement(BtnTemplate, {
     style: muteLocalAudio,
     name: local.hasAudio === ToggleState.enabled ? 'mic' : 'micOff',
-    onClick: function onClick() {
-      return localAudioTrack && muteAudio(local, dispatch, localAudioTrack);
-    }
+    onClick: () => localAudioTrack && muteAudio(local, dispatch, localAudioTrack)
   }));
 }
 
-var muteVideo = (function (user, dispatch, localVideoTrack) {
-  try {
-    var _temp4 = function () {
-      if (user.uid === 0) {
-        var localState = user.hasVideo;
+var muteVideo = (async (user, dispatch, localVideoTrack) => {
+  if (user.uid === 0) {
+    const localState = user.hasVideo;
 
-        var _temp5 = function () {
-          if (localState === ToggleState.enabled || localState === ToggleState.disabled) {
-            dispatch({
-              type: 'local-user-mute-video',
-              value: [localState === ToggleState.enabled ? ToggleState.disabling : ToggleState.enabling]
-            });
+    if (localState === ToggleState.enabled || localState === ToggleState.disabled) {
+      dispatch({
+        type: 'local-user-mute-video',
+        value: [localState === ToggleState.enabled ? ToggleState.disabling : ToggleState.enabling]
+      });
 
-            var _temp6 = _catch(function () {
-              return Promise.resolve(localVideoTrack === null || localVideoTrack === void 0 ? void 0 : localVideoTrack.setEnabled(localState !== ToggleState.enabled)).then(function () {
-                dispatch({
-                  type: 'local-user-mute-video',
-                  value: [localState === ToggleState.enabled ? ToggleState.disabled : ToggleState.enabled]
-                });
-              });
-            }, function () {
-              dispatch({
-                type: 'local-user-mute-video',
-                value: [localState]
-              });
-            });
-
-            if (_temp6 && _temp6.then) return _temp6.then(function () {});
-          }
-        }();
-
-        if (_temp5 && _temp5.then) return _temp5.then(function () {});
+      try {
+        await (localVideoTrack === null || localVideoTrack === void 0 ? void 0 : localVideoTrack.setEnabled(localState !== ToggleState.enabled));
+        dispatch({
+          type: 'local-user-mute-video',
+          value: [localState === ToggleState.enabled ? ToggleState.disabled : ToggleState.enabled]
+        });
+      } catch (e) {
+        dispatch({
+          type: 'local-user-mute-video',
+          value: [localState]
+        });
       }
-    }();
-
-    return Promise.resolve(_temp4 && _temp4.then ? _temp4.then(function () {}) : void 0);
-  } catch (e) {
-    return Promise.reject(e);
+    }
   }
 });
 
 function LocalVideoMute() {
-  var _useContext = useContext(PropsContext),
-      styleProps = _useContext.styleProps;
-
-  var _ref = styleProps || {},
-      localBtnStyles = _ref.localBtnStyles;
-
-  var _ref2 = localBtnStyles || {},
-      muteLocalVideo = _ref2.muteLocalVideo;
-
-  var _useContext2 = useContext(RtcContext),
-      dispatch = _useContext2.dispatch,
-      localVideoTrack = _useContext2.localVideoTrack;
-
-  var local = useContext(LocalContext);
+  const {
+    styleProps
+  } = useContext(PropsContext);
+  const {
+    localBtnStyles
+  } = styleProps || {};
+  const {
+    muteLocalVideo
+  } = localBtnStyles || {};
+  const {
+    dispatch,
+    localVideoTrack
+  } = useContext(RtcContext);
+  const local = useContext(LocalContext);
   return React.createElement("div", null, React.createElement(BtnTemplate, {
     style: muteLocalVideo,
     name: local.hasVideo === ToggleState.enabled ? 'videocam' : 'videocamOff',
-    onClick: function onClick() {
-      return localVideoTrack && muteVideo(local, dispatch, localVideoTrack);
-    }
+    onClick: () => localVideoTrack && muteVideo(local, dispatch, localVideoTrack)
   }));
 }
 
 function LocalControls() {
-  var _useContext = useContext(PropsContext),
-      styleProps = _useContext.styleProps,
-      rtcProps = _useContext.rtcProps;
-
-  var _ref = styleProps || {},
-      localBtnContainer = _ref.localBtnContainer;
-
+  const {
+    styleProps,
+    rtcProps
+  } = useContext(PropsContext);
+  const {
+    localBtnContainer
+  } = styleProps || {};
   return React.createElement("div", {
-    style: _extends({}, {
-      width: '100%',
-      height: 70,
-      zIndex: 10,
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-evenly',
-      alignItems: 'center'
-    }, localBtnContainer)
+    style: { ...{
+        width: '100%',
+        height: 70,
+        zIndex: 10,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center'
+      },
+      ...localBtnContainer
+    }
   }, rtcProps.role !== 'audience' && React.createElement(LocalVideoMute, null), rtcProps.role !== 'audience' && React.createElement(LocalAudioMute, null));
 }
 
@@ -1188,107 +971,116 @@ var popUpStateEnum;
   popUpStateEnum[popUpStateEnum["unmuteCamera"] = 4] = "unmuteCamera";
 })(popUpStateEnum || (popUpStateEnum = {}));
 
-var RtmContext = createContext(null);
-var RtmProvider = RtmContext.Provider;
-var RtmConsumer = RtmContext.Consumer;
+const RtmContext = createContext(null);
+const RtmProvider = RtmContext.Provider;
+const RtmConsumer = RtmContext.Consumer;
 
 function RemoteVideoMute(props) {
-  var _useContext = useContext(PropsContext),
-      styleProps = _useContext.styleProps;
-
-  var _useContext2 = useContext(RtmContext),
-      sendMuteRequest = _useContext2.sendMuteRequest,
-      uidMap = _useContext2.uidMap;
-
-  var _ref = styleProps || {},
-      remoteBtnStyles = _ref.remoteBtnStyles;
-
-  var _ref2 = remoteBtnStyles || {},
-      muteRemoteVideo = _ref2.muteRemoteVideo;
-
-  var UIKitUser = props.UIKitUser;
-  var isMuted = UIKitUser.hasVideo === remoteTrackState.no;
+  const {
+    styleProps
+  } = useContext(PropsContext);
+  const {
+    sendMuteRequest,
+    uidMap
+  } = useContext(RtmContext);
+  const {
+    remoteBtnStyles
+  } = styleProps || {};
+  const {
+    muteRemoteVideo
+  } = remoteBtnStyles || {};
+  const {
+    UIKitUser
+  } = props;
+  const isMuted = UIKitUser.hasVideo === remoteTrackState.no;
   return UIKitUser.uid !== 0 && uidMap[UIKitUser.uid] ? React.createElement("div", null, React.createElement(BtnTemplate, {
     name: UIKitUser.hasVideo === remoteTrackState.subbed ? 'videocam' : 'videocamOff',
     style: muteRemoteVideo,
-    onClick: function onClick() {
-      return sendMuteRequest(mutingDevice.camera, UIKitUser.uid, !isMuted);
-    }
+    onClick: () => sendMuteRequest(mutingDevice.camera, UIKitUser.uid, !isMuted)
   })) : null;
 }
 
 function RemoteAudioMute(props) {
-  var _useContext = useContext(PropsContext),
-      styleProps = _useContext.styleProps;
-
-  var _ref = styleProps || {},
-      remoteBtnStyles = _ref.remoteBtnStyles;
-
-  var _useContext2 = useContext(RtmContext),
-      sendMuteRequest = _useContext2.sendMuteRequest,
-      uidMap = _useContext2.uidMap;
-
-  var _ref2 = remoteBtnStyles || {},
-      muteRemoteAudio = _ref2.muteRemoteAudio;
-
-  var UIKitUser = props.UIKitUser;
-  var isMuted = UIKitUser.hasAudio === remoteTrackState.no;
+  const {
+    styleProps
+  } = useContext(PropsContext);
+  const {
+    remoteBtnStyles
+  } = styleProps || {};
+  const {
+    sendMuteRequest,
+    uidMap
+  } = useContext(RtmContext);
+  const {
+    muteRemoteAudio
+  } = remoteBtnStyles || {};
+  const {
+    UIKitUser
+  } = props;
+  const isMuted = UIKitUser.hasAudio === remoteTrackState.no;
   return UIKitUser.uid !== 0 && uidMap[UIKitUser.uid] ? React.createElement("div", null, React.createElement(BtnTemplate, {
     style: muteRemoteAudio,
     name: UIKitUser.hasAudio === remoteTrackState.subbed ? 'mic' : 'micOff',
-    onClick: function onClick() {
-      return sendMuteRequest(mutingDevice.microphone, UIKitUser.uid, !isMuted);
-    }
+    onClick: () => sendMuteRequest(mutingDevice.microphone, UIKitUser.uid, !isMuted)
   })) : null;
 }
 
 function SwapUser(props) {
-  var _useContext = useContext(RtcContext),
-      dispatch = _useContext.dispatch;
-
-  var UIKitUser = props.UIKitUser;
+  const {
+    dispatch
+  } = useContext(RtcContext);
+  const {
+    UIKitUser
+  } = props;
   return React.createElement("div", null, React.createElement(BtnTemplate, {
     name: 'remoteSwap',
-    onClick: function onClick() {
-      return dispatch({
-        type: 'user-swap',
-        value: [UIKitUser]
-      });
-    }
+    onClick: () => dispatch({
+      type: 'user-swap',
+      value: [UIKitUser]
+    })
   }));
 }
 
-var VideoPlaceholder = function VideoPlaceholder(props) {
-  var _useContext = useContext(PropsContext),
-      styleProps = _useContext.styleProps,
-      rtcProps = _useContext.rtcProps;
-
-  var _ref = styleProps || {},
-      maxViewStyles = _ref.maxViewStyles,
-      maxViewOverlayContainer = _ref.maxViewOverlayContainer;
-
-  var user = props.user;
-  var CustomVideoPlaceholder = rtcProps.CustomVideoPlaceholder;
+const VideoPlaceholder = props => {
+  const {
+    styleProps,
+    rtcProps
+  } = useContext(PropsContext);
+  const {
+    maxViewStyles,
+    maxViewOverlayContainer
+  } = styleProps || {};
+  const {
+    user
+  } = props;
+  const {
+    CustomVideoPlaceholder
+  } = rtcProps;
   return !CustomVideoPlaceholder ? React.createElement("div", {
     key: user.uid,
-    style: _extends({}, style.max, maxViewStyles)
+    style: { ...style.max,
+      ...maxViewStyles
+    }
   }, React.createElement("div", {
     style: style.imgContainer
   }, React.createElement("img", {
     style: style.img,
     src: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJmZWF0aGVyIGZlYXRoZXItdXNlciI+PHBhdGggZD0iTTIwIDIxdi0yYTQgNCAwIDAgMC00LTRIOGE0IDQgMCAwIDAtNCA0djIiPjwvcGF0aD48Y2lyY2xlIGN4PSIxMiIgY3k9IjciIHI9IjQiPjwvY2lyY2xlPjwvc3ZnPg=='
   })), props.isShown && React.createElement("div", {
-    style: _extends({}, style.btnContainer, maxViewOverlayContainer)
+    style: { ...style.btnContainer,
+      ...maxViewOverlayContainer
+    }
   }, props.showButtons && React.createElement(React.Fragment, null, !rtcProps.disableRtm && React.createElement(RemoteVideoMute, {
     UIKitUser: user
   }), !rtcProps.disableRtm && React.createElement(RemoteAudioMute, {
     UIKitUser: user
   }), props.showSwap && React.createElement(SwapUser, {
     UIKitUser: user
-  })))) : CustomVideoPlaceholder && CustomVideoPlaceholder(_extends({}, props), null);
+  })))) : CustomVideoPlaceholder && CustomVideoPlaceholder({ ...props
+  }, null);
 };
 
-var style = {
+const style = {
   max: {
     flex: 1,
     display: 'flex',
@@ -1318,21 +1110,25 @@ var style = {
   }
 };
 
-var Username = function Username(props) {
-  var _useContext = useContext(RtmContext),
-      usernames = _useContext.usernames;
-
-  var _useContext2 = useContext(PropsContext),
-      rtmProps = _useContext2.rtmProps,
-      styleProps = _useContext2.styleProps;
-
-  var user = props.user;
+const Username = props => {
+  const {
+    usernames
+  } = useContext(RtmContext);
+  const {
+    rtmProps,
+    styleProps
+  } = useContext(PropsContext);
+  const {
+    user
+  } = props;
   return rtmProps !== null && rtmProps !== void 0 && rtmProps.displayUsername ? React.createElement("p", {
-    style: _extends({}, styles.username, styleProps === null || styleProps === void 0 ? void 0 : styleProps.usernameText)
+    style: { ...styles.username,
+      ...(styleProps === null || styleProps === void 0 ? void 0 : styleProps.usernameText)
+    }
   }, usernames[user.uid]) : React.createElement(React.Fragment, null);
 };
 
-var styles = {
+const styles = {
   username: {
     position: 'absolute',
     background: '#007bffaa',
@@ -1345,34 +1141,31 @@ var styles = {
   }
 };
 
-var MaxVideoView = function MaxVideoView(props) {
-  var _useContext = useContext(RtcContext),
-      mediaStore = _useContext.mediaStore;
-
-  var _useContext2 = useContext(PropsContext),
-      styleProps = _useContext2.styleProps,
-      rtcProps = _useContext2.rtcProps;
-
-  var _ref = styleProps || {},
-      maxViewStyles = _ref.maxViewStyles,
-      videoMode = _ref.videoMode,
-      maxViewOverlayContainer = _ref.maxViewOverlayContainer;
-
-  var renderModeProp = videoMode === null || videoMode === void 0 ? void 0 : videoMode.max;
-
-  var _useState = useState(false),
-      isShown = _useState[0],
-      setIsShown = _useState[1];
-
-  var user = props.user;
+const MaxVideoView = props => {
+  const {
+    mediaStore
+  } = useContext(RtcContext);
+  const {
+    styleProps,
+    rtcProps
+  } = useContext(PropsContext);
+  const {
+    maxViewStyles,
+    videoMode,
+    maxViewOverlayContainer
+  } = styleProps || {};
+  const renderModeProp = videoMode === null || videoMode === void 0 ? void 0 : videoMode.max;
+  const [isShown, setIsShown] = useState(false);
+  const {
+    user
+  } = props;
   return React.createElement("div", {
-    style: _extends({}, styles$1.container, props.style, maxViewStyles),
-    onMouseEnter: function onMouseEnter() {
-      return setIsShown(true);
+    style: { ...styles$1.container,
+      ...props.style,
+      ...maxViewStyles
     },
-    onMouseLeave: function onMouseLeave() {
-      return setIsShown(false);
-    }
+    onMouseEnter: () => setIsShown(true),
+    onMouseLeave: () => setIsShown(false)
   }, user.hasVideo === 1 ? React.createElement("div", {
     style: styles$1.videoContainer
   }, !rtcProps.disableRtm && React.createElement(Username, {
@@ -1384,7 +1177,9 @@ var MaxVideoView = function MaxVideoView(props) {
     },
     videoTrack: mediaStore[user.uid].videoTrack
   }), isShown && React.createElement("div", {
-    style: _extends({}, styles$1.overlay, maxViewOverlayContainer)
+    style: { ...styles$1.overlay,
+      ...maxViewOverlayContainer
+    }
   }, !rtcProps.disableRtm && React.createElement(RemoteVideoMute, {
     UIKitUser: user
   }), !rtcProps.disableRtm && React.createElement(RemoteAudioMute, {
@@ -1400,7 +1195,7 @@ var MaxVideoView = function MaxVideoView(props) {
   })));
 };
 
-var styles$1 = {
+const styles$1 = {
   container: {
     display: 'flex',
     flex: 1
@@ -1433,43 +1228,40 @@ var styles$1 = {
   }
 };
 
-var MinVideoView = function MinVideoView(props) {
-  var _useContext = useContext(RtcContext),
-      mediaStore = _useContext.mediaStore;
-
-  var _useContext2 = useContext(PropsContext),
-      styleProps = _useContext2.styleProps,
-      rtcProps = _useContext2.rtcProps;
-
-  var _ref = styleProps || {},
-      minViewStyles = _ref.minViewStyles,
-      videoMode = _ref.videoMode,
-      minViewOverlayContainer = _ref.minViewOverlayContainer;
-
-  var renderModeProp = videoMode === null || videoMode === void 0 ? void 0 : videoMode.min;
-
-  var _useState = useState(false),
-      isShown = _useState[0],
-      setIsShown = _useState[1];
-
-  var user = props.user;
+const MinVideoView = props => {
+  const {
+    mediaStore
+  } = useContext(RtcContext);
+  const {
+    styleProps,
+    rtcProps
+  } = useContext(PropsContext);
+  const {
+    minViewStyles,
+    videoMode,
+    minViewOverlayContainer
+  } = styleProps || {};
+  const renderModeProp = videoMode === null || videoMode === void 0 ? void 0 : videoMode.min;
+  const [isShown, setIsShown] = useState(false);
+  const {
+    user
+  } = props;
   return React.createElement("div", {
-    style: _extends({}, {
-      display: 'flex',
-      flex: 1
-    }, minViewStyles),
-    onMouseEnter: function onMouseEnter() {
-      return setIsShown(true);
+    style: { ...{
+        display: 'flex',
+        flex: 1
+      },
+      ...minViewStyles
     },
-    onMouseLeave: function onMouseLeave() {
-      return setIsShown(false);
-    }
+    onMouseEnter: () => setIsShown(true),
+    onMouseLeave: () => setIsShown(false)
   }, user.hasVideo === 1 ? React.createElement("div", {
-    style: _extends({}, {
-      display: 'flex',
-      flex: 1,
-      position: 'relative'
-    })
+    style: { ...{
+        display: 'flex',
+        flex: 1,
+        position: 'relative'
+      }
+    }
   }, React.createElement(AgoraVideoPlayer, {
     style: {
       flex: 10,
@@ -1480,13 +1272,15 @@ var MinVideoView = function MinVideoView(props) {
     },
     videoTrack: mediaStore[user.uid].videoTrack
   }), isShown && React.createElement("div", {
-    style: _extends({}, {
-      margin: 4,
-      position: 'absolute',
-      flex: 1,
-      display: 'flex',
-      flexDirection: 'column'
-    }, minViewOverlayContainer)
+    style: { ...{
+        margin: 4,
+        position: 'absolute',
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column'
+      },
+      ...minViewOverlayContainer
+    }
   }, !rtcProps.disableRtm && React.createElement(RemoteVideoMute, {
     UIKitUser: user
   }), !rtcProps.disableRtm && React.createElement(RemoteAudioMute, {
@@ -1501,32 +1295,25 @@ var MinVideoView = function MinVideoView(props) {
   }));
 };
 
-var styles$2 = {"test":"_3ybTi","scrollbar":"_3Sxu7"};
+var styles$2 = {"test":"_styles-module__test__3ybTi","scrollbar":"_styles-module__scrollbar__3Sxu7"};
 
-var PinnedVideo = function PinnedVideo() {
-  var _useContext = useContext(PropsContext),
-      styleProps = _useContext.styleProps,
-      rtcProps = _useContext.rtcProps;
-
-  var _ref = styleProps || {},
-      minViewContainer = _ref.minViewContainer,
-      pinnedVideoContainer = _ref.pinnedVideoContainer,
-      maxViewContainer = _ref.maxViewContainer,
-      scrollViewContainer = _ref.scrollViewContainer;
-
-  var parentRef = useRef(null);
-
-  var _useState = useState(0),
-      width = _useState[0],
-      setWidth = _useState[1];
-
-  var _useState2 = useState(0),
-      height = _useState2[0],
-      setHeight = _useState2[1];
-
-  var isLandscape = width > height;
-  useEffect(function () {
-    var handleResize = function handleResize() {
+const PinnedVideo = () => {
+  const {
+    styleProps,
+    rtcProps
+  } = useContext(PropsContext);
+  const {
+    minViewContainer,
+    pinnedVideoContainer,
+    maxViewContainer,
+    scrollViewContainer
+  } = styleProps || {};
+  const parentRef = useRef(null);
+  const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
+  const isLandscape = width > height;
+  useEffect(() => {
+    const handleResize = () => {
       if (parentRef.current) {
         setWidth(parentRef.current.offsetWidth);
         setHeight(parentRef.current.offsetHeight);
@@ -1540,144 +1327,130 @@ var PinnedVideo = function PinnedVideo() {
       setHeight(parentRef.current.offsetHeight);
     }
 
-    return function () {
+    return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
   return React.createElement("div", {
     ref: parentRef,
-    style: _extends({}, {
-      display: 'flex',
-      flex: 1,
-      flexDirection: isLandscape ? 'row' : 'column-reverse',
-      overflow: 'hidden'
-    }, pinnedVideoContainer)
+    style: { ...{
+        display: 'flex',
+        flex: 1,
+        flexDirection: isLandscape ? 'row' : 'column-reverse',
+        overflow: 'hidden'
+      },
+      ...pinnedVideoContainer
+    }
   }, React.createElement("div", {
-    style: _extends({}, {
-      display: 'flex',
-      flex: isLandscape ? 5 : 4
-    }, maxViewContainer)
-  }, React.createElement(MaxUidConsumer, null, function (maxUsers) {
-    return rtcProps.role === 'audience' && maxUsers[0].uid === 0 ? null : React.createElement(MinVideoView, {
-      user: maxUsers[0]
-    });
-  })), React.createElement("div", {
+    style: { ...{
+        display: 'flex',
+        flex: isLandscape ? 5 : 4
+      },
+      ...maxViewContainer
+    }
+  }, React.createElement(MaxUidConsumer, null, maxUsers => rtcProps.role === 'audience' && maxUsers[0].uid === 0 ? null : React.createElement(MaxVideoView, {
+    user: maxUsers[0]
+  }))), React.createElement("div", {
     className: styles$2.scrollbar,
-    style: _extends({}, {
-      overflowY: isLandscape ? 'scroll' : 'hidden',
-      overflowX: !isLandscape ? 'scroll' : 'hidden',
-      display: 'flex',
-      flex: 1,
-      flexDirection: isLandscape ? 'column' : 'row'
-    }, scrollViewContainer)
-  }, React.createElement(MinUidConsumer, null, function (minUsers) {
-    return minUsers.map(function (user) {
-      return rtcProps.role === 'audience' && user.uid === 0 ? null : React.createElement("div", {
-        style: _extends({}, {
-          minHeight: isLandscape ? '35vh' : '99%',
-          minWidth: isLandscape ? '99%' : '40vw',
-          margin: 2,
-          display: 'flex'
-        }, minViewContainer),
-        key: user.uid
-      }, React.createElement(MaxVideoView, {
-        user: user
-      }));
-    });
+    style: { ...{
+        overflowY: isLandscape ? 'scroll' : 'hidden',
+        overflowX: !isLandscape ? 'scroll' : 'hidden',
+        display: 'flex',
+        flex: 1,
+        flexDirection: isLandscape ? 'column' : 'row'
+      },
+      ...scrollViewContainer
+    }
+  }, React.createElement(MinUidConsumer, null, minUsers => minUsers.map(user => rtcProps.role === 'audience' && user.uid === 0 ? null : React.createElement("div", {
+    style: { ...{
+        minHeight: isLandscape ? '35vh' : '99%',
+        minWidth: isLandscape ? '99%' : '40vw',
+        margin: 2,
+        display: 'flex'
+      },
+      ...minViewContainer
+    },
+    key: user.uid
+  }, React.createElement(MinVideoView, {
+    user: user
+  }))))));
+};
+
+const GridVideo = () => {
+  const {
+    styleProps,
+    rtcProps
+  } = useContext(PropsContext);
+  const {
+    gridVideoCells,
+    gridVideoContainer
+  } = styleProps || {};
+  const max = useContext(MaxUidContext);
+  const min = useContext(MinUidContext);
+  const users = rtcProps.role === 'audience' ? [...max, ...min].filter(user => user.uid !== 0) : [...max, ...min];
+  const parentRef = useRef(null);
+  const [width, setWidth] = useState(window.innerWidth);
+  const [height, setHeight] = useState(window.innerHeight);
+  const isLandscape = width > height;
+  const unit = 'minmax(0, 1fr) ';
+  useEffect(() => {
+    const handleResize = () => {
+      if (parentRef.current) {
+        setWidth(parentRef.current.offsetWidth);
+        setHeight(parentRef.current.offsetHeight);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    if (parentRef.current) {
+      setWidth(parentRef.current.offsetWidth);
+      setHeight(parentRef.current.offsetHeight);
+    }
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+  return React.createElement("div", {
+    ref: parentRef,
+    style: { ...{
+        width: '100%',
+        height: '100%',
+        display: 'grid',
+        gridTemplateColumns: isLandscape ? users.length > 9 ? unit.repeat(4) : users.length > 4 ? unit.repeat(3) : users.length > 1 ? unit.repeat(2) : unit : users.length > 8 ? unit.repeat(3) : users.length > 2 ? unit.repeat(2) : unit
+      },
+      ...gridVideoContainer
+    }
+  }, users.map(user => React.createElement(MaxVideoView, {
+    user: user,
+    style: { ...{
+        height: '100%',
+        width: '100%'
+      },
+      ...gridVideoCells
+    },
+    key: user.uid
   })));
 };
 
-var GridVideo = function GridVideo() {
-  var _useContext = useContext(PropsContext),
-      styleProps = _useContext.styleProps,
-      rtcProps = _useContext.rtcProps;
-
-  var _ref = styleProps || {},
-      gridVideoCells = _ref.gridVideoCells,
-      gridVideoContainer = _ref.gridVideoContainer;
-
-  var max = useContext(MaxUidContext);
-  var min = useContext(MinUidContext);
-  var users = rtcProps.role === 'audience' ? [].concat(max, min).filter(function (user) {
-    return user.uid !== 0;
-  }) : [].concat(max, min);
-  var parentRef = useRef(null);
-
-  var _useState = useState(window.innerWidth),
-      width = _useState[0],
-      setWidth = _useState[1];
-
-  var _useState2 = useState(window.innerHeight),
-      height = _useState2[0],
-      setHeight = _useState2[1];
-
-  var isLandscape = width > height;
-  var unit = 'minmax(0, 1fr) ';
-  useEffect(function () {
-    var handleResize = function handleResize() {
-      if (parentRef.current) {
-        setWidth(parentRef.current.offsetWidth);
-        setHeight(parentRef.current.offsetHeight);
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    if (parentRef.current) {
-      setWidth(parentRef.current.offsetWidth);
-      setHeight(parentRef.current.offsetHeight);
-    }
-
-    return function () {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-  return React.createElement("div", {
-    ref: parentRef,
-    style: _extends({}, {
-      width: '100%',
-      height: '100%',
-      display: 'grid',
-      gridTemplateColumns: isLandscape ? users.length > 9 ? unit.repeat(4) : users.length > 4 ? unit.repeat(3) : users.length > 1 ? unit.repeat(2) : unit : users.length > 8 ? unit.repeat(3) : users.length > 2 ? unit.repeat(2) : unit
-    }, gridVideoContainer)
-  }, users.map(function (user) {
-    return React.createElement(MaxVideoView, {
-      user: user,
-      style: _extends({}, {
-        height: '100%',
-        width: '100%'
-      }, gridVideoCells),
-      key: user.uid
-    });
-  }));
-};
-
-var useTracks = createMicrophoneAndCameraTracks({
+const useTracks = createMicrophoneAndCameraTracks({
   encoderConfig: {}
 }, {
   encoderConfig: {}
 });
 
-var TracksConfigure = function TracksConfigure(props) {
-  var _useState = useState(false),
-      ready = _useState[0],
-      setReady = _useState[1];
-
-  var _useState2 = useState(null),
-      localVideoTrack = _useState2[0],
-      setLocalVideoTrack = _useState2[1];
-
-  var _useState3 = useState(null),
-      localAudioTrack = _useState3[0],
-      setLocalAudioTrack = _useState3[1];
-
-  var _useTracks = useTracks(),
-      trackReady = _useTracks.ready,
-      tracks = _useTracks.tracks,
-      error = _useTracks.error;
-
-  var mediaStore = useRef({});
-  useEffect(function () {
+const TracksConfigure = props => {
+  const [ready, setReady] = useState(false);
+  const [localVideoTrack, setLocalVideoTrack] = useState(null);
+  const [localAudioTrack, setLocalAudioTrack] = useState(null);
+  const {
+    ready: trackReady,
+    tracks,
+    error
+  } = useTracks();
+  const mediaStore = useRef({});
+  useEffect(() => {
     if (tracks !== null) {
       setLocalAudioTrack(tracks[0]);
       setLocalVideoTrack(tracks[1]);
@@ -1691,7 +1464,7 @@ var TracksConfigure = function TracksConfigure(props) {
       setReady(false);
     }
 
-    return function () {
+    return () => {
       if (tracks) {
         var _tracks$, _tracks$2;
 
@@ -1708,250 +1481,168 @@ var TracksConfigure = function TracksConfigure(props) {
   }, ready ? props.children : null);
 };
 
-var timeNow = function timeNow() {
-  return new Date().getTime();
-};
+const timeNow = () => new Date().getTime();
 
-var useChannel = createLazyChannel();
-var useClient$1 = createLazyClient();
+const useChannel = createLazyChannel();
+const useClient$1 = createLazyClient();
 
-var RtmConfigure = function RtmConfigure(props) {
-  var _useContext = useContext(PropsContext),
-      rtcProps = _useContext.rtcProps,
-      rtmProps = _useContext.rtmProps;
+const RtmConfigure = props => {
+  const {
+    rtcProps,
+    rtmProps
+  } = useContext(PropsContext);
+  const [isLoggedIn, setLoggedIn] = useState(false);
+  const rtmClient = useClient$1(rtcProps.appId);
+  const channel = useChannel(rtmClient, rtcProps.channel);
+  const localUid = useRef('');
+  const timerValueRef = useRef(5);
+  const local = useContext(LocalContext);
+  const {
+    rtmCallbacks
+  } = useContext(PropsContext);
+  const [uidMap, setUidMap] = useState({});
+  const [usernames, setUsernames] = useState({});
+  const [userDataMap, setUserDataMap] = useState({});
+  const [popUpState, setPopUpState] = useState(popUpStateEnum.closed);
+  const [rtmStatus, setRtmStatus] = useState(rtmStatusEnum.offline);
+  const {
+    localUid: rtcUid,
+    localAudioTrack,
+    localVideoTrack,
+    dispatch,
+    channelJoined
+  } = useContext(RtcContext);
 
-  var _useState = useState(false),
-      isLoggedIn = _useState[0],
-      setLoggedIn = _useState[1];
+  const login = async () => {
+    const {
+      tokenUrl
+    } = rtcProps;
 
-  var rtmClient = useClient$1(rtcProps.appId);
-  var channel = useChannel(rtmClient, rtcProps.channel);
-  var localUid = useRef('');
-  var timerValueRef = useRef(5);
-  var local = useContext(LocalContext);
-
-  var _useContext2 = useContext(PropsContext),
-      rtmCallbacks = _useContext2.rtmCallbacks;
-
-  var _useState2 = useState({}),
-      uidMap = _useState2[0],
-      setUidMap = _useState2[1];
-
-  var _useState3 = useState({}),
-      usernames = _useState3[0],
-      setUsernames = _useState3[1];
-
-  var _useState4 = useState({}),
-      userDataMap = _useState4[0],
-      setUserDataMap = _useState4[1];
-
-  var _useState5 = useState(popUpStateEnum.closed),
-      popUpState = _useState5[0],
-      setPopUpState = _useState5[1];
-
-  var _useState6 = useState(rtmStatusEnum.offline),
-      rtmStatus = _useState6[0],
-      setRtmStatus = _useState6[1];
-
-  var _useContext3 = useContext(RtcContext),
-      rtcUid = _useContext3.localUid,
-      localAudioTrack = _useContext3.localAudioTrack,
-      localVideoTrack = _useContext3.localVideoTrack,
-      dispatch = _useContext3.dispatch,
-      channelJoined = _useContext3.channelJoined;
-
-  var login = function login() {
-    try {
-      var tokenUrl = rtcProps.tokenUrl;
-
-      var _temp4 = function () {
-        if (tokenUrl) {
-          var _temp5 = _catch(function () {
-            return Promise.resolve(fetch(tokenUrl + '/rtm/' + ((rtmProps === null || rtmProps === void 0 ? void 0 : rtmProps.uid) || localUid.current))).then(function (res) {
-              return Promise.resolve(res.json()).then(function (data) {
-                var serverToken = data.rtmToken;
-                return Promise.resolve(rtmClient.login({
-                  uid: (rtmProps === null || rtmProps === void 0 ? void 0 : rtmProps.uid) || localUid.current,
-                  token: serverToken
-                })).then(function () {
-                  timerValueRef.current = 5;
-                });
-              });
-            });
-          }, function () {
-            setTimeout(function () {
-              try {
-                timerValueRef.current = timerValueRef.current + timerValueRef.current;
-                login();
-                return Promise.resolve();
-              } catch (e) {
-                return Promise.reject(e);
-              }
-            }, timerValueRef.current * 1000);
-          });
-
-          if (_temp5 && _temp5.then) return _temp5.then(function () {});
-        } else {
-          var _temp6 = _catch(function () {
-            return Promise.resolve(rtmClient.login({
-              uid: (rtmProps === null || rtmProps === void 0 ? void 0 : rtmProps.uid) || localUid.current,
-              token: (rtmProps === null || rtmProps === void 0 ? void 0 : rtmProps.token) || undefined
-            })).then(function () {
-              timerValueRef.current = 5;
-            });
-          }, function () {
-            setTimeout(function () {
-              try {
-                timerValueRef.current = timerValueRef.current + timerValueRef.current;
-                login();
-                return Promise.resolve();
-              } catch (e) {
-                return Promise.reject(e);
-              }
-            }, timerValueRef.current * 1000);
-          });
-
-          if (_temp6 && _temp6.then) return _temp6.then(function () {});
-        }
-      }();
-
-      return Promise.resolve(_temp4 && _temp4.then ? _temp4.then(function () {}) : void 0);
-    } catch (e) {
-      return Promise.reject(e);
-    }
-  };
-
-  var joinChannel = function joinChannel() {
-    return Promise.resolve(rtcUid).then(function () {
-      var _temp7 = _catch(function () {
-        return Promise.resolve(channel.join()).then(function () {
-          timerValueRef.current = 5;
+    if (tokenUrl) {
+      try {
+        const res = await fetch(tokenUrl + '/rtm/' + ((rtmProps === null || rtmProps === void 0 ? void 0 : rtmProps.uid) || localUid.current));
+        const data = await res.json();
+        const serverToken = data.rtmToken;
+        await rtmClient.login({
+          uid: (rtmProps === null || rtmProps === void 0 ? void 0 : rtmProps.uid) || localUid.current,
+          token: serverToken
         });
-      }, function () {
-        setTimeout(function () {
-          try {
-            timerValueRef.current = timerValueRef.current + timerValueRef.current;
-            joinChannel();
-            return Promise.resolve();
-          } catch (e) {
-            return Promise.reject(e);
-          }
+        timerValueRef.current = 5;
+      } catch (error) {
+        setTimeout(async () => {
+          timerValueRef.current = timerValueRef.current + timerValueRef.current;
+          login();
         }, timerValueRef.current * 1000);
-      });
-
-      if (_temp7 && _temp7.then) return _temp7.then(function () {});
-    });
-  };
-
-  var init = function init() {
-    try {
-      setRtmStatus(rtmStatusEnum.initialising);
-      rtcProps.uid ? localUid.current = String(rtcProps.uid) : localUid.current = String(timeNow());
-      rtmClient.on('ConnectionStateChanged', function (state, reason) {
-        console.log(state, reason);
-      });
-      rtmClient.on('TokenExpired', function () {
-        try {
-          var tokenUrl = rtcProps.tokenUrl;
-          console.log('token expired - renewing');
-
-          var _temp10 = function () {
-            if (tokenUrl) {
-              var _temp11 = _catch(function () {
-                return Promise.resolve(fetch(tokenUrl + '/rtm/' + ((rtmProps === null || rtmProps === void 0 ? void 0 : rtmProps.uid) || localUid.current))).then(function (res) {
-                  return Promise.resolve(res.json()).then(function (data) {
-                    var serverToken = data.rtmToken;
-                    return Promise.resolve(rtmClient.renewToken(serverToken)).then(function () {
-                      timerValueRef.current = 5;
-                    });
-                  });
-                });
-              }, function (error) {
-                console.error('TokenExpiredError', error);
-              });
-
-              if (_temp11 && _temp11.then) return _temp11.then(function () {});
-            }
-          }();
-
-          return Promise.resolve(_temp10 && _temp10.then ? _temp10.then(function () {}) : void 0);
-        } catch (e) {
-          return Promise.reject(e);
-        }
-      });
-      rtmClient.on('MessageFromPeer', function (message, peerId) {
-        handleReceivedMessage(message, peerId);
-      });
-      channel.on('ChannelMessage', function (message, peerId) {
-        handleReceivedMessage(message, peerId);
-      });
-      channel.on('MemberJoined', function (peerId) {
-        try {
-          return Promise.resolve(sendPeerMessage(createUserData(), peerId)).then(function () {});
-        } catch (e) {
-          return Promise.reject(e);
-        }
-      });
-      channel.on('MemberCountUpdated', function (count) {
-        try {
-          console.log('RTM-MemberCountUpdated: ', count);
-          return Promise.resolve();
-        } catch (e) {
-          return Promise.reject(e);
-        }
-      });
-
-      if (rtmCallbacks !== null && rtmCallbacks !== void 0 && rtmCallbacks.channel) {
-        Object.keys(rtmCallbacks.channel).map(function (callback) {
-          if (rtmCallbacks.channel) {
-            channel.on(callback, rtmCallbacks.channel[callback]);
-          }
-        });
-      } else if (rtmCallbacks !== null && rtmCallbacks !== void 0 && rtmCallbacks.client) {
-        Object.keys(rtmCallbacks.client).map(function (callback) {
-          if (rtmCallbacks.client) {
-            rtmClient.on(callback, rtmCallbacks.client[callback]);
-          }
-        });
       }
-
-      if (rtcProps.tokenUrl) {
-        var tokenUrl = rtcProps.tokenUrl,
-            uid = rtcProps.uid;
-        rtmClient.on('TokenExpired', function () {
-          try {
-            console.log('token expired');
-            return Promise.resolve(fetch(tokenUrl + '/rtm/' + (uid || 0) + '/')).then(function (res) {
-              return Promise.resolve(res.json()).then(function (data) {
-                var token = data.rtmToken;
-                rtmClient.renewToken(token);
-              });
-            });
-          } catch (e) {
-            return Promise.reject(e);
-          }
+    } else {
+      try {
+        await rtmClient.login({
+          uid: (rtmProps === null || rtmProps === void 0 ? void 0 : rtmProps.uid) || localUid.current,
+          token: (rtmProps === null || rtmProps === void 0 ? void 0 : rtmProps.token) || undefined
         });
+        timerValueRef.current = 5;
+      } catch (error) {
+        setTimeout(async () => {
+          timerValueRef.current = timerValueRef.current + timerValueRef.current;
+          login();
+        }, timerValueRef.current * 1000);
       }
-
-      setRtmStatus(rtmStatusEnum.loggingIn);
-      return Promise.resolve(login()).then(function () {
-        setRtmStatus(rtmStatusEnum.loggedIn);
-        return Promise.resolve(joinChannel()).then(function () {
-          setRtmStatus(rtmStatusEnum.connected);
-          setUsernames(function (p) {
-            return _extends({}, p, {
-              0: rtmProps === null || rtmProps === void 0 ? void 0 : rtmProps.username
-            });
-          });
-          sendChannelMessage(createUserData());
-        });
-      });
-    } catch (e) {
-      return Promise.reject(e);
     }
   };
 
-  var createUserData = function createUserData() {
+  const joinChannel = async () => {
+    await rtcUid;
+
+    try {
+      await channel.join();
+      timerValueRef.current = 5;
+    } catch (error) {
+      setTimeout(async () => {
+        timerValueRef.current = timerValueRef.current + timerValueRef.current;
+        joinChannel();
+      }, timerValueRef.current * 1000);
+    }
+  };
+
+  const init = async () => {
+    setRtmStatus(rtmStatusEnum.initialising);
+    rtcProps.uid ? localUid.current = String(rtcProps.uid) : localUid.current = String(timeNow());
+    rtmClient.on('ConnectionStateChanged', (state, reason) => {
+      console.log(state, reason);
+    });
+    rtmClient.on('TokenExpired', async () => {
+      const {
+        tokenUrl
+      } = rtcProps;
+      console.log('token expired - renewing');
+
+      if (tokenUrl) {
+        try {
+          const res = await fetch(tokenUrl + '/rtm/' + ((rtmProps === null || rtmProps === void 0 ? void 0 : rtmProps.uid) || localUid.current));
+          const data = await res.json();
+          const serverToken = data.rtmToken;
+          await rtmClient.renewToken(serverToken);
+          timerValueRef.current = 5;
+        } catch (error) {
+          console.error('TokenExpiredError', error);
+        }
+      }
+    });
+    rtmClient.on('MessageFromPeer', (message, peerId) => {
+      handleReceivedMessage(message, peerId);
+    });
+    channel.on('ChannelMessage', (message, peerId) => {
+      handleReceivedMessage(message, peerId);
+    });
+    channel.on('MemberJoined', async peerId => {
+      await sendPeerMessage(createUserData(), peerId);
+    });
+    channel.on('MemberCountUpdated', async count => {
+      console.log('RTM-MemberCountUpdated: ', count);
+    });
+
+    if (rtmCallbacks !== null && rtmCallbacks !== void 0 && rtmCallbacks.channel) {
+      Object.keys(rtmCallbacks.channel).map(callback => {
+        if (rtmCallbacks.channel) {
+          channel.on(callback, rtmCallbacks.channel[callback]);
+        }
+      });
+    } else if (rtmCallbacks !== null && rtmCallbacks !== void 0 && rtmCallbacks.client) {
+      Object.keys(rtmCallbacks.client).map(callback => {
+        if (rtmCallbacks.client) {
+          rtmClient.on(callback, rtmCallbacks.client[callback]);
+        }
+      });
+    }
+
+    if (rtcProps.tokenUrl) {
+      const {
+        tokenUrl,
+        uid
+      } = rtcProps;
+      rtmClient.on('TokenExpired', async () => {
+        console.log('token expired');
+        const res = await fetch(tokenUrl + '/rtm/' + (uid || 0) + '/');
+        const data = await res.json();
+        const token = data.rtmToken;
+        rtmClient.renewToken(token);
+      });
+    }
+
+    setRtmStatus(rtmStatusEnum.loggingIn);
+    await login();
+    setRtmStatus(rtmStatusEnum.loggedIn);
+    await joinChannel();
+    setRtmStatus(rtmStatusEnum.connected);
+    setUsernames(p => {
+      return { ...p,
+        0: rtmProps === null || rtmProps === void 0 ? void 0 : rtmProps.username
+      };
+    });
+    sendChannelMessage(createUserData());
+  };
+
+  const createUserData = () => {
     return {
       messageType: 'UserData',
       rtmId: (rtmProps === null || rtmProps === void 0 ? void 0 : rtmProps.uid) || localUid.current,
@@ -1970,16 +1661,16 @@ var RtmConfigure = function RtmConfigure(props) {
     };
   };
 
-  var sendMuteRequest = function sendMuteRequest(device, rtcId, mute) {
-    var forced = (rtmProps === null || rtmProps === void 0 ? void 0 : rtmProps.showPopUpBeforeRemoteMute) === false;
-    var payload = {
+  const sendMuteRequest = (device, rtcId, mute) => {
+    const forced = (rtmProps === null || rtmProps === void 0 ? void 0 : rtmProps.showPopUpBeforeRemoteMute) === false;
+    const payload = {
       messageType: 'MuteRequest',
-      device: device,
-      rtcId: rtcId,
-      mute: mute,
+      device,
+      rtcId,
+      mute,
       isForceful: forced
     };
-    var peerId = uidMap[rtcId];
+    const peerId = uidMap[rtcId];
 
     if (forced && !mute) {
       console.log('cannot send force unmute request');
@@ -1990,9 +1681,9 @@ var RtmConfigure = function RtmConfigure(props) {
     }
   };
 
-  var handleReceivedMessage = function handleReceivedMessage(message, peerId) {
-    var payload = message.rawMessage;
-    var messageObject = parsePayload(payload);
+  const handleReceivedMessage = (message, peerId) => {
+    const payload = message.rawMessage;
+    const messageObject = parsePayload(payload);
     console.log(messageObject, peerId);
 
     switch (messageObject.messageType) {
@@ -2025,25 +1716,25 @@ var RtmConfigure = function RtmConfigure(props) {
     }
   };
 
-  var handleReceivedUserDataMessage = function handleReceivedUserDataMessage(userData) {
-    setUidMap(function (p) {
-      var _extends2;
-
-      return _extends({}, p, (_extends2 = {}, _extends2[userData.rtcId] = userData.rtmId, _extends2));
+  const handleReceivedUserDataMessage = userData => {
+    setUidMap(p => {
+      return { ...p,
+        [userData.rtcId]: userData.rtmId
+      };
     });
-    setUsernames(function (p) {
-      var _extends3;
-
-      return _extends({}, p, (_extends3 = {}, _extends3[userData.rtcId] = userData.username, _extends3));
+    setUsernames(p => {
+      return { ...p,
+        [userData.rtcId]: userData.username
+      };
     });
-    setUserDataMap(function (p) {
-      var _extends4;
-
-      return _extends({}, p, (_extends4 = {}, _extends4[userData.rtmId] = userData, _extends4));
+    setUserDataMap(p => {
+      return { ...p,
+        [userData.rtmId]: userData
+      };
     });
   };
 
-  var handleReceivedMuteMessage = function handleReceivedMuteMessage(muteRequest) {
+  const handleReceivedMuteMessage = muteRequest => {
     if (rtcUid.current === muteRequest.rtcId) {
       if (muteRequest.isForceful) {
         if (muteRequest.mute) {
@@ -2063,62 +1754,49 @@ var RtmConfigure = function RtmConfigure(props) {
     }
   };
 
-  var handlePing = function handlePing(peerId) {
+  const handlePing = peerId => {
     sendPeerMessage({
       messageType: 'RtmDataRequest',
       type: 'pong'
     }, peerId);
   };
 
-  var handleUserDataRequest = function handleUserDataRequest(peerId) {
+  const handleUserDataRequest = peerId => {
     sendPeerMessage(createUserData(), peerId);
   };
 
-  var sendChannelMessage = function sendChannelMessage(payload) {
-    try {
-      var rawMessage = createRawMessage(payload);
-      var message = rtmClient.createMessage({
-        rawMessage: rawMessage,
-        messageType: AgoraRTM.MessageType.RAW,
-        description: 'AgoraUIKit'
-      });
-      return Promise.resolve(channel.sendMessage(message)).then(function () {});
-    } catch (e) {
-      return Promise.reject(e);
-    }
+  const sendChannelMessage = async payload => {
+    const rawMessage = createRawMessage(payload);
+    const message = rtmClient.createMessage({
+      rawMessage: rawMessage,
+      messageType: AgoraRTM.MessageType.RAW,
+      description: 'AgoraUIKit'
+    });
+    await channel.sendMessage(message);
   };
 
-  var sendPeerMessage = function sendPeerMessage(payload, peerId) {
-    try {
-      var rawMessage = createRawMessage(payload);
-      var message = rtmClient.createMessage({
-        rawMessage: rawMessage,
-        messageType: AgoraRTM.MessageType.RAW,
-        description: 'AgoraUIKit'
-      });
-      return Promise.resolve(rtmClient.sendMessageToPeer(message, peerId)).then(function () {});
-    } catch (e) {
-      return Promise.reject(e);
-    }
+  const sendPeerMessage = async (payload, peerId) => {
+    const rawMessage = createRawMessage(payload);
+    const message = rtmClient.createMessage({
+      rawMessage: rawMessage,
+      messageType: AgoraRTM.MessageType.RAW,
+      description: 'AgoraUIKit'
+    });
+    await rtmClient.sendMessageToPeer(message, peerId);
   };
 
-  var end = function end() {
-    try {
-      return Promise.resolve(rtmClient.logout()).then(function () {
-        return Promise.resolve(rtmClient.removeAllListeners()).then(function () {});
-      });
-    } catch (e) {
-      return Promise.reject(e);
-    }
+  const end = async () => {
+    await rtmClient.logout();
+    await rtmClient.removeAllListeners();
   };
 
-  useEffect(function () {
+  useEffect(() => {
     if (channelJoined) {
       init();
       setLoggedIn(true);
     }
 
-    return function () {
+    return () => {
       if (channelJoined) {
         end();
       }
@@ -2126,48 +1804,50 @@ var RtmConfigure = function RtmConfigure(props) {
   }, [rtcProps.channel, rtcProps.appId, channelJoined]);
   return React.createElement(RtmProvider, {
     value: {
-      rtmStatus: rtmStatus,
-      sendPeerMessage: sendPeerMessage,
-      sendChannelMessage: sendChannelMessage,
-      sendMuteRequest: sendMuteRequest,
-      rtmClient: rtmClient,
-      uidMap: uidMap,
-      usernames: usernames,
-      userDataMap: userDataMap,
-      popUpState: popUpState,
-      setPopUpState: setPopUpState
+      rtmStatus,
+      sendPeerMessage,
+      sendChannelMessage,
+      sendMuteRequest,
+      rtmClient,
+      uidMap,
+      usernames,
+      userDataMap,
+      popUpState,
+      setPopUpState
     }
   }, isLoggedIn ? props.children : React.createElement(React.Fragment, null));
 };
 
-var enc = new TextEncoder();
-var dec = new TextDecoder();
-var createRawMessage = function createRawMessage(msg) {
+const enc = new TextEncoder();
+const dec = new TextDecoder();
+const createRawMessage = msg => {
   return enc.encode(JSON.stringify(msg));
 };
-var parsePayload = function parsePayload(data) {
+const parsePayload = data => {
   return JSON.parse(dec.decode(data));
 };
 
 function PopUp() {
-  var _useContext = useContext(PropsContext),
-      styleProps = _useContext.styleProps;
-
-  var _useContext2 = useContext(RtmContext),
-      popUpState = _useContext2.popUpState,
-      setPopUpState = _useContext2.setPopUpState;
-
-  var _ref = styleProps || {},
-      popUpContainer = _ref.popUpContainer;
-
-  var _useContext3 = useContext(RtcContext),
-      dispatch = _useContext3.dispatch,
-      localVideoTrack = _useContext3.localVideoTrack,
-      localAudioTrack = _useContext3.localAudioTrack;
-
-  var local = useContext(LocalContext);
+  const {
+    styleProps
+  } = useContext(PropsContext);
+  const {
+    popUpState,
+    setPopUpState
+  } = useContext(RtmContext);
+  const {
+    popUpContainer
+  } = styleProps || {};
+  const {
+    dispatch,
+    localVideoTrack,
+    localAudioTrack
+  } = useContext(RtcContext);
+  const local = useContext(LocalContext);
   return popUpState !== popUpStateEnum.closed ? React.createElement("div", {
-    style: _extends({}, styles$3.container, popUpContainer)
+    style: { ...styles$3.container,
+      ...popUpContainer
+    }
   }, React.createElement("div", {
     style: {
       color: '#fff',
@@ -2182,7 +1862,7 @@ function PopUp() {
       justifyContent: 'space-around'
     }
   }, React.createElement("div", {
-    onClick: function onClick() {
+    onClick: () => {
       switch (popUpState) {
         case popUpStateEnum.muteCamera:
           local.hasVideo && localVideoTrack && muteVideo(local, dispatch, localVideoTrack);
@@ -2206,13 +1886,11 @@ function PopUp() {
     style: styles$3.button
   }, "Confirm"), React.createElement("div", {
     style: styles$3.buttonClose,
-    onClick: function onClick() {
-      return setPopUpState(popUpStateEnum.closed);
-    }
+    onClick: () => setPopUpState(popUpStateEnum.closed)
   }, "Close"))) : null;
 }
 
-var styles$3 = {
+const styles$3 = {
   button: {
     color: '#fff',
     cursor: 'pointer',
@@ -2247,29 +1925,32 @@ var styles$3 = {
   }
 };
 
-var AgoraUIKit = function AgoraUIKit(props) {
-  var styleProps = props.styleProps,
-      rtcProps = props.rtcProps;
-
-  var _ref = styleProps || {},
-      UIKitContainer = _ref.UIKitContainer;
-
+const AgoraUIKit = props => {
+  const {
+    styleProps,
+    rtcProps
+  } = props;
+  const {
+    UIKitContainer
+  } = styleProps || {};
   return React.createElement(PropsProvider, {
     value: props
   }, React.createElement("div", {
-    style: _extends({}, style$1, UIKitContainer)
+    style: { ...style$1,
+      ...UIKitContainer
+    }
   }, rtcProps.role === 'audience' ? React.createElement(VideocallUI, null) : React.createElement(TracksConfigure, null, React.createElement(VideocallUI, null))));
 };
 
-var VideocallUI = function VideocallUI() {
-  var _useContext = useContext(PropsContext),
-      rtcProps = _useContext.rtcProps;
-
+const VideocallUI = () => {
+  const {
+    rtcProps
+  } = useContext(PropsContext);
   return React.createElement(RtcConfigure, {
     callActive: rtcProps.callActive
   }, React.createElement(LocalUserContext, null, rtcProps.disableRtm ? React.createElement(React.Fragment, null, (rtcProps === null || rtcProps === void 0 ? void 0 : rtcProps.layout) === layout.grid ? React.createElement(GridVideo, null) : React.createElement(PinnedVideo, null), React.createElement(LocalControls, null)) : React.createElement(RtmConfigure, null, React.createElement(PopUp, null), (rtcProps === null || rtcProps === void 0 ? void 0 : rtcProps.layout) === layout.grid ? React.createElement(GridVideo, null) : React.createElement(PinnedVideo, null), React.createElement(LocalControls, null))));
 };
-var style$1 = {
+const style$1 = {
   display: 'flex',
   flex: 1,
   minHeight: 0,
@@ -2277,25 +1958,23 @@ var style$1 = {
 };
 
 function EndCall() {
-  var _useContext = useContext(PropsContext),
-      styleProps = _useContext.styleProps,
-      callbacks = _useContext.callbacks;
-
-  var _ref = styleProps || {},
-      localBtnStyles = _ref.localBtnStyles;
-
-  var _ref2 = localBtnStyles || {},
-      endCall = _ref2.endCall;
-
+  const {
+    styleProps,
+    callbacks
+  } = useContext(PropsContext);
+  const {
+    localBtnStyles
+  } = styleProps || {};
+  const {
+    endCall
+  } = localBtnStyles || {};
   return React.createElement(BtnTemplate, {
     style: endCall || {
       backgroundColor: '#ef5588',
       borderColor: '#f00'
     },
     name: 'callEnd',
-    onClick: function onClick() {
-      return (callbacks === null || callbacks === void 0 ? void 0 : callbacks.EndCall) && callbacks.EndCall();
-    }
+    onClick: () => (callbacks === null || callbacks === void 0 ? void 0 : callbacks.EndCall) && callbacks.EndCall()
   });
 }
 

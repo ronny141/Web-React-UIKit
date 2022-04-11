@@ -1,6 +1,6 @@
 /* add css module styles here (optional) */
 
-._3ybTi {
+._styles-module__test__3ybTi {
   margin: 2em;
   padding: 0.5em;
   border: 2px solid #000;
@@ -8,16 +8,16 @@
   text-align: center;
 }
 
-._3Sxu7::-webkit-scrollbar {
+._styles-module__scrollbar__3Sxu7::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
-._3Sxu7::-webkit-scrollbar-track {
+._styles-module__scrollbar__3Sxu7::-webkit-scrollbar-track {
   background: #ccc;
 }
-._3Sxu7::-webkit-scrollbar-thumb {
+._styles-module__scrollbar__3Sxu7::-webkit-scrollbar-thumb {
   background: #007bffcc;
 }
-._3Sxu7::-webkit-scrollbar-thumb:hover {
+._styles-module__scrollbar__3Sxu7::-webkit-scrollbar-thumb:hover {
   background: #007bff;
 }

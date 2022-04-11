@@ -1498,7 +1498,7 @@ var MinVideoView = function MinVideoView(props) {
   }));
 };
 
-var styles$2 = {"test":"_3ybTi","scrollbar":"_3Sxu7"};
+var styles$2 = {"test":"_styles-module__test__3ybTi","scrollbar":"_styles-module__scrollbar__3Sxu7"};
 
 var PinnedVideo = function PinnedVideo() {
   var _useContext = React.useContext(PropsContext),
@@ -1555,7 +1555,7 @@ var PinnedVideo = function PinnedVideo() {
       flex: isLandscape ? 5 : 4
     }, maxViewContainer)
   }, React__default.createElement(MaxUidConsumer, null, function (maxUsers) {
-    return rtcProps.role === 'audience' && maxUsers[0].uid === 0 ? null : React__default.createElement(MinVideoView, {
+    return rtcProps.role === 'audience' && maxUsers[0].uid === 0 ? null : React__default.createElement(MaxVideoView, {
       user: maxUsers[0]
     });
   })), React__default.createElement("div", {
@@ -1577,7 +1577,7 @@ var PinnedVideo = function PinnedVideo() {
           display: 'flex'
         }, minViewContainer),
         key: user.uid
-      }, React__default.createElement(MaxVideoView, {
+      }, React__default.createElement(MinVideoView, {
         user: user
       }));
     });
