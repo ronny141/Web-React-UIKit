@@ -77,7 +77,10 @@ const PinnedVideo: React.FC = () => {
             overflowX: !isLandscape ? 'scroll' : 'hidden',
             display: 'flex',
             flex: 1,
-            flexDirection: isLandscape ? 'column' : 'row'
+            flexDirection: isLandscape ? 'column' : 'row',
+            position: 'absolute',
+            width: '22vh',
+            height: '35vh'
           },
           ...scrollViewContainer
         }}

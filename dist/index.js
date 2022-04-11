@@ -1565,7 +1565,10 @@ var PinnedVideo = function PinnedVideo() {
       overflowX: !isLandscape ? 'scroll' : 'hidden',
       display: 'flex',
       flex: 1,
-      flexDirection: isLandscape ? 'column' : 'row'
+      flexDirection: isLandscape ? 'column' : 'row',
+      position: 'absolute',
+      width: '22vh',
+      height: '35vh'
     }, scrollViewContainer)
   }, React__default.createElement(MinUidConsumer, null, function (minUsers) {
     return minUsers.map(function (user) {
