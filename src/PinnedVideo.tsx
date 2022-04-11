@@ -89,10 +89,12 @@ const PinnedVideo: React.FC = () => {
                 <div
                   style={{
                     ...{
-                      minHeight: isLandscape ? '35vh' : '99%',
-                      minWidth: isLandscape ? '99%' : '40vw',
+                      minHeight: '35vh',
+                      minWidth: '25vh',
                       margin: 2,
-                      display: 'flex'
+                      display: 'flex',
+                      position: 'absolute',
+                      width: '25vh'
                     },
                     ...minViewContainer
                   }}
