@@ -64,7 +64,8 @@ const PinnedVideo: React.FC = () => {
         <MaxUidConsumer>
           {(maxUsers) =>
             rtcProps.role === 'audience' && maxUsers[0].uid === 0 ? null : (
-              <MaxVideoView user={maxUsers[0]} />
+              // <MaxVideoView user={maxUsers[0]} />
+              <MinVideoView user={maxUsers[0]} />
             )
           }
         </MaxUidConsumer>
@@ -98,7 +99,7 @@ const PinnedVideo: React.FC = () => {
                   }}
                   key={user.uid}
                 >
-                  <MinVideoView user={user} />
+                  <MaxVideoView user={user} />
                 </div>
               )
             )

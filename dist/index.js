@@ -1555,7 +1555,7 @@ var PinnedVideo = function PinnedVideo() {
       flex: isLandscape ? 5 : 4
     }, maxViewContainer)
   }, React__default.createElement(MaxUidConsumer, null, function (maxUsers) {
-    return rtcProps.role === 'audience' && maxUsers[0].uid === 0 ? null : React__default.createElement(MaxVideoView, {
+    return rtcProps.role === 'audience' && maxUsers[0].uid === 0 ? null : React__default.createElement(MinVideoView, {
       user: maxUsers[0]
     });
   })), React__default.createElement("div", {
@@ -1577,7 +1577,7 @@ var PinnedVideo = function PinnedVideo() {
           display: 'flex'
         }, minViewContainer),
         key: user.uid
-      }, React__default.createElement(MinVideoView, {
+      }, React__default.createElement(MaxVideoView, {
         user: user
       }));
     });
