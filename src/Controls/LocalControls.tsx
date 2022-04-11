@@ -12,7 +12,6 @@ function LocalControls() {
     <div
       style={{
         ...{
-          backgroundColor: '#007bff',
           width: '100%',
           height: 70,
           zIndex: 10,
@@ -26,7 +25,6 @@ function LocalControls() {
     >
       {rtcProps.role !== 'audience' && <LocalVideoMute />}
       {rtcProps.role !== 'audience' && <LocalAudioMute />}
-      <EndCall />
     </div>
   )
 }
