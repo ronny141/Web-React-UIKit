@@ -23,7 +23,7 @@ const BtnTemplate = (props: BtnTemplateInterface) => {
           borderRadius: '100%',
           borderWidth: 2,
           borderStyle: 'solid',
-          borderColor: '#fff',
+          borderColor: 'yellow',
           backgroundColor: 'rgba(0,80,180,0.2)',
           alignItems: 'center',
           justifyContent: 'center',
