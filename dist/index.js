@@ -856,17 +856,15 @@ var RtcConfigure = function RtcConfigure(props) {
 
 var icons = {
   videocam: React__default.createElement(reactFontawesome.FontAwesomeIcon, {
+    fontSize: 48,
     icon: 'fa-solid fa-circle-video',
     color: '#00C2FF'
   }),
-  videocamOff: React__default.createElement(React__default.Fragment, null, React__default.createElement("path", {
-    d: 'M16 16v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2m5.66 0H14a2 2 0 0 1 2 2v3.34l1 1L23 7v10'
-  }), React__default.createElement("line", {
-    x1: '1',
-    y1: '1',
-    x2: '23',
-    y2: '23'
-  })),
+  videocamOff: React__default.createElement(reactFontawesome.FontAwesomeIcon, {
+    fontSize: 48,
+    icon: 'fa-solid fa-video-slash',
+    color: '#A3A2A2'
+  }),
   remoteSwap: React__default.createElement(React__default.Fragment, null, React__default.createElement("polyline", {
     points: '15 3 21 3 21 9'
   }), React__default.createElement("polyline", {
@@ -947,8 +945,6 @@ var BtnTemplate = function BtnTemplate(props) {
       width: 35,
       height: 35,
       borderRadius: '100%',
-      borderWidth: 2,
-      borderStyle: 'solid',
       borderColor: 'transparent',
       backgroundColor: '#fff',
       alignItems: 'center',
@@ -963,8 +959,8 @@ var BtnTemplate = function BtnTemplate(props) {
     alt: name
   }) : React__default.createElement("svg", {
     style: {
-      width: iconSize || 24,
-      height: iconSize || 24
+      width: iconSize || 48,
+      height: iconSize || 48
     },
     xmlns: 'http://www.w3.org/2000/svg',
     width: '48',
