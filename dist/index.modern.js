@@ -1521,7 +1521,8 @@ var PinnedVideo = function PinnedVideo() {
       display: 'flex',
       flex: 1,
       flexDirection: isLandscape ? 'row' : 'column-reverse',
-      overflow: 'hidden'
+      overflow: 'hidden',
+      position: 'relative'
     }, pinnedVideoContainer)
   }, React.createElement("div", {
     style: _extends({}, {
@@ -1541,21 +1542,20 @@ var PinnedVideo = function PinnedVideo() {
       flex: 1,
       flexDirection: isLandscape ? 'column' : 'row',
       position: 'absolute',
-      width: '22vh',
-      height: '35vh',
-      marginTop: '220px',
-      marginLeft: '370px',
+      width: '131px',
+      height: '200px',
+      marginTop: '53%',
+      marginLeft: '74%',
       borderRadius: '10px'
     }, scrollViewContainer)
   }, React.createElement(MinUidConsumer, null, function (minUsers) {
     return minUsers.map(function (user) {
       return rtcProps.role === 'audience' && user.uid === 0 ? null : React.createElement("div", {
         style: _extends({}, {
-          minHeight: '35vh',
-          minWidth: '25vh',
+          minHeight: '200px',
+          minWidth: '131px',
           display: 'flex',
-          position: 'absolute',
-          width: '25vh'
+          position: 'absolute'
         }, minViewContainer),
         key: user.uid
       }, React.createElement(MinVideoView, {

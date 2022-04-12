@@ -47,7 +47,8 @@ const PinnedVideo: React.FC = () => {
           display: 'flex',
           flex: 1,
           flexDirection: isLandscape ? 'row' : 'column-reverse',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          position: 'relative'
         },
         ...pinnedVideoContainer
       }}
@@ -79,10 +80,10 @@ const PinnedVideo: React.FC = () => {
             flex: 1,
             flexDirection: isLandscape ? 'column' : 'row',
             position: 'absolute',
-            width: '22vh',
-            height: '35vh',
-            marginTop: '220px',
-            marginLeft: '370px',
+            width: '131px',
+            height: '200px',
+            marginTop: '53%',
+            marginLeft: '74%',
             borderRadius: '10px'
           },
           ...scrollViewContainer
@@ -95,11 +96,10 @@ const PinnedVideo: React.FC = () => {
                 <div
                   style={{
                     ...{
-                      minHeight: '35vh',
-                      minWidth: '25vh',
+                      minHeight: '200px',
+                      minWidth: '131px',
                       display: 'flex',
-                      position: 'absolute',
-                      width: '25vh'
+                      position: 'absolute'
                     },
                     ...minViewContainer
                   }}
