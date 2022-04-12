@@ -2,20 +2,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
 
 const icons = {
-  videocam: (
-    <FontAwesomeIcon
-      fontSize={48}
-      icon='fa-solid fa-circle-video'
-      color='#00C2FF'
-    />
-  ),
-  videocamOff: (
-    <FontAwesomeIcon
-      fontSize={48}
-      icon='fa-solid fa-video-slash'
-      color='#A3A2A2'
-    />
-  ),
+  videocam: <FontAwesomeIcon icon='fa-solid fa-video' color='#FFF' />,
+  videocamOff: <FontAwesomeIcon icon='fa-solid fa-video-slash' color='#FFF' />,
   remoteSwap: (
     <React.Fragment>
       <polyline points='15 3 21 3 21 9' />

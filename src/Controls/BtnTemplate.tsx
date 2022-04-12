@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import PropsContext from '../PropsContext'
 import Icons from './Icons'
+import iconsColors from './IconsColors'
 interface BtnTemplateInterface {
   name: string
   color?: string
@@ -22,7 +23,7 @@ const BtnTemplate = (props: BtnTemplateInterface) => {
           height: 35,
           borderRadius: '100%',
           borderColor: 'transparent',
-          backgroundColor: '#fff',
+          backgroundColor: iconsColors[name],
           alignItems: 'center',
           justifyContent: 'center',
           display: 'flex',
@@ -39,8 +40,8 @@ const BtnTemplate = (props: BtnTemplateInterface) => {
       ) : (
         <svg
           style={{
-            width: iconSize || 48,
-            height: iconSize || 48
+            width: iconSize || 24,
+            height: iconSize || 24
           }}
           xmlns='http://www.w3.org/2000/svg'
           width='48'
