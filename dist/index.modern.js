@@ -853,7 +853,8 @@ var RtcConfigure = function RtcConfigure(props) {
 
 var icons = {
   videocam: React.createElement(FontAwesomeIcon, {
-    icon: 'fa-solid fa-circle-video'
+    icon: 'fa-solid fa-circle-video',
+    color: '#00C2FF'
   }),
   videocamOff: React.createElement(React.Fragment, null, React.createElement("path", {
     d: 'M16 16v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2m5.66 0H14a2 2 0 0 1 2 2v3.34l1 1L23 7v10'
@@ -946,7 +947,7 @@ var BtnTemplate = function BtnTemplate(props) {
       borderWidth: 2,
       borderStyle: 'solid',
       borderColor: 'transparent',
-      backgroundColor: 'rgba(0,80,180,0.2)',
+      backgroundColor: '#fff',
       alignItems: 'center',
       justifyContent: 'center',
       display: 'flex',
@@ -963,8 +964,8 @@ var BtnTemplate = function BtnTemplate(props) {
       height: iconSize || 24
     },
     xmlns: 'http://www.w3.org/2000/svg',
-    width: '24',
-    height: '24',
+    width: '48',
+    height: '48',
     viewBox: '0 0 24 24',
     fill: 'none',
     opacity: disabled ? '0.5' : '1',

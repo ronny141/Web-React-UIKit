@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
 
 const icons = {
-  videocam: <FontAwesomeIcon icon='fa-solid fa-circle-video' />,
+  videocam: <FontAwesomeIcon icon='fa-solid fa-circle-video' color='#00C2FF' />,
   videocamOff: (
     <React.Fragment>
       <path d='M16 16v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2m5.66 0H14a2 2 0 0 1 2 2v3.34l1 1L23 7v10' />
