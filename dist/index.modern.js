@@ -921,12 +921,12 @@ var icons = {
 };
 
 var iconsColors = {
-  videocam: '#FFF',
-  videocamOff: 'blue',
-  remoteSwap: 'yellow',
+  videocam: '#00C2FF',
+  videocamOff: '#A3A2A2',
+  remoteSwap: 'transparent',
   callEnd: 'red',
-  mic: 'green',
-  micOff: '#A3A3A3'
+  mic: '#00C2FF',
+  micOff: '#A3A2A2'
 };
 
 var BtnTemplate = function BtnTemplate(props) {
