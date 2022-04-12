@@ -46,7 +46,7 @@ const PinnedVideo: React.FC = () => {
         ...{
           display: 'flex',
           flex: 1,
-          flexDirection: isLandscape ? 'row' : 'column-reverse',
+          flexDirection: 'row',
           overflow: 'hidden',
           position: 'relative'
         },
@@ -82,8 +82,8 @@ const PinnedVideo: React.FC = () => {
             position: 'absolute',
             width: '131px',
             height: '200px',
-            marginTop: '53%',
-            marginLeft: '74%',
+            bottom: '27px',
+            right: '17px',
             borderRadius: '10px'
           },
           ...scrollViewContainer

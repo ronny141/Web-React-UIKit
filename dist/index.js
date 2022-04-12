@@ -1517,7 +1517,7 @@ var PinnedVideo = function PinnedVideo() {
     style: _extends({}, {
       display: 'flex',
       flex: 1,
-      flexDirection: isLandscape ? 'row' : 'column-reverse',
+      flexDirection: 'row',
       overflow: 'hidden',
       position: 'relative'
     }, pinnedVideoContainer)
@@ -1541,8 +1541,8 @@ var PinnedVideo = function PinnedVideo() {
       position: 'absolute',
       width: '131px',
       height: '200px',
-      marginTop: '53%',
-      marginLeft: '74%',
+      bottom: '27px',
+      right: '17px',
       borderRadius: '10px'
     }, scrollViewContainer)
   }, React__default.createElement(MinUidConsumer, null, function (minUsers) {
