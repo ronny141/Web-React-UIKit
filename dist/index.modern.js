@@ -883,41 +883,14 @@ var icons = {
     x2: '1',
     y2: '23'
   })),
-  mic: React.createElement(React.Fragment, null, React.createElement("path", {
-    d: 'M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z'
-  }), React.createElement("path", {
-    d: 'M19 10v2a7 7 0 0 1-14 0v-2'
-  }), React.createElement("line", {
-    x1: '12',
-    y1: '19',
-    x2: '12',
-    y2: '23'
-  }), React.createElement("line", {
-    x1: '8',
-    y1: '23',
-    x2: '16',
-    y2: '23'
-  })),
-  micOff: React.createElement(React.Fragment, null, React.createElement("line", {
-    x1: '1',
-    y1: '1',
-    x2: '23',
-    y2: '23'
-  }), React.createElement("path", {
-    d: 'M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6'
-  }), React.createElement("path", {
-    d: 'M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23'
-  }), React.createElement("line", {
-    x1: '12',
-    y1: '19',
-    x2: '12',
-    y2: '23'
-  }), React.createElement("line", {
-    x1: '8',
-    y1: '23',
-    x2: '16',
-    y2: '23'
-  }))
+  mic: React.createElement(FontAwesomeIcon, {
+    icon: 'fa-solid fa-microphone',
+    color: '#FFF'
+  }),
+  micOff: React.createElement(FontAwesomeIcon, {
+    icon: 'fa-solid fa-microphone-slash',
+    color: '#FFF'
+  })
 };
 
 var iconsColors = {
@@ -1270,12 +1243,12 @@ var VideoPlaceholder = function VideoPlaceholder(props) {
   return !CustomVideoPlaceholder ? React.createElement("div", {
     key: user.uid,
     style: _extends({}, style.max, maxViewStyles)
-  }, React.createElement("div", {
-    style: style.imgContainer
-  }, React.createElement("img", {
-    style: style.img,
-    src: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJmZWF0aGVyIGZlYXRoZXItdXNlciI+PHBhdGggZD0iTTIwIDIxdi0yYTQgNCAwIDAgMC00LTRIOGE0IDQgMCAwIDAtNCA0djIiPjwvcGF0aD48Y2lyY2xlIGN4PSIxMiIgY3k9IjciIHI9IjQiPjwvY2lyY2xlPjwvc3ZnPg=='
-  })), props.isShown && React.createElement("div", {
+  }, React.createElement(FontAwesomeIcon, {
+    "data-testid": 'icon',
+    icon: 'fa-solid fa-circle-user',
+    fontSize: 120,
+    color: '#C4C4C4'
+  }), props.isShown && React.createElement("div", {
     style: _extends({}, style.btnContainer, maxViewOverlayContainer)
   }, props.showButtons && React.createElement(React.Fragment, null, !rtcProps.disableRtm && React.createElement(RemoteVideoMute, {
     UIKitUser: user

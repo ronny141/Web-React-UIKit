@@ -3,6 +3,7 @@ import RemoteVideoMute from './Controls/Remote/RemoteVideoMute'
 import RemoteAudioMute from './Controls/Remote/RemoteAudioMute'
 import PropsContext, { VideoPlaceholderProps } from './PropsContext'
 import SwapUser from './Controls/SwapUser'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 /**
  * React component that is renderd when the video track is muted.
  */
@@ -20,12 +21,12 @@ const VideoPlaceholder = (props: VideoPlaceholderProps) => {
         ...maxViewStyles
       }}
     >
-      <div style={style.imgContainer}>
-        <img
-          style={style.img}
-          src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJmZWF0aGVyIGZlYXRoZXItdXNlciI+PHBhdGggZD0iTTIwIDIxdi0yYTQgNCAwIDAgMC00LTRIOGE0IDQgMCAwIDAtNCA0djIiPjwvcGF0aD48Y2lyY2xlIGN4PSIxMiIgY3k9IjciIHI9IjQiPjwvY2lyY2xlPjwvc3ZnPg=='
-        />
-      </div>
+      <FontAwesomeIcon
+        data-testid='icon'
+        icon='fa-solid fa-circle-user'
+        fontSize={120}
+        color='#C4C4C4'
+      />
       {props.isShown && (
         <div
           style={{
