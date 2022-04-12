@@ -1,12 +1,8 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
 
 const icons = {
-  videocam: (
-    <React.Fragment>
-      <polygon points='23 7 16 12 23 17 23 7' />
-      <rect x='1' y='5' width='15' height='14' rx='2' ry='2' />
-    </React.Fragment>
-  ),
+  videocam: <FontAwesomeIcon icon='fa-solid fa-circle-video' />,
   videocamOff: (
     <React.Fragment>
       <path d='M16 16v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2m5.66 0H14a2 2 0 0 1 2 2v3.34l1 1L23 7v10' />

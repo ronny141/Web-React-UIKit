@@ -4,6 +4,7 @@ var React = require('react');
 var React__default = _interopDefault(React);
 var AgoraRTC = require('agora-rtc-react');
 var AgoraRTC__default = _interopDefault(AgoraRTC);
+var reactFontawesome = require('@fortawesome/react-fontawesome');
 var AgoraRTM = require('agora-rtm-react');
 var AgoraRTM__default = _interopDefault(AgoraRTM);
 
@@ -854,16 +855,9 @@ var RtcConfigure = function RtcConfigure(props) {
 };
 
 var icons = {
-  videocam: React__default.createElement(React__default.Fragment, null, React__default.createElement("polygon", {
-    points: '23 7 16 12 23 17 23 7'
-  }), React__default.createElement("rect", {
-    x: '1',
-    y: '5',
-    width: '15',
-    height: '14',
-    rx: '2',
-    ry: '2'
-  })),
+  videocam: React__default.createElement(reactFontawesome.FontAwesomeIcon, {
+    icon: 'fa-solid fa-circle-video'
+  }),
   videocamOff: React__default.createElement(React__default.Fragment, null, React__default.createElement("path", {
     d: 'M16 16v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2m5.66 0H14a2 2 0 0 1 2 2v3.34l1 1L23 7v10'
   }), React__default.createElement("line", {
@@ -954,7 +948,7 @@ var BtnTemplate = function BtnTemplate(props) {
       borderRadius: '100%',
       borderWidth: 2,
       borderStyle: 'solid',
-      borderColor: 'yellow',
+      borderColor: 'transparent',
       backgroundColor: 'rgba(0,80,180,0.2)',
       alignItems: 'center',
       justifyContent: 'center',

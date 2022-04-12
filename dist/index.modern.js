@@ -1,5 +1,6 @@
 import React, { useRef, useContext, useState, useReducer, useEffect, createContext } from 'react';
 import AgoraRTC, { createClient, AgoraVideoPlayer, createMicrophoneAndCameraTracks } from 'agora-rtc-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AgoraRTM, { createLazyChannel, createLazyClient } from 'agora-rtm-react';
 
 function _extends() {
@@ -851,16 +852,9 @@ var RtcConfigure = function RtcConfigure(props) {
 };
 
 var icons = {
-  videocam: React.createElement(React.Fragment, null, React.createElement("polygon", {
-    points: '23 7 16 12 23 17 23 7'
-  }), React.createElement("rect", {
-    x: '1',
-    y: '5',
-    width: '15',
-    height: '14',
-    rx: '2',
-    ry: '2'
-  })),
+  videocam: React.createElement(FontAwesomeIcon, {
+    icon: 'fa-solid fa-circle-video'
+  }),
   videocamOff: React.createElement(React.Fragment, null, React.createElement("path", {
     d: 'M16 16v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2m5.66 0H14a2 2 0 0 1 2 2v3.34l1 1L23 7v10'
   }), React.createElement("line", {
@@ -951,7 +945,7 @@ var BtnTemplate = function BtnTemplate(props) {
       borderRadius: '100%',
       borderWidth: 2,
       borderStyle: 'solid',
-      borderColor: 'yellow',
+      borderColor: 'transparent',
       backgroundColor: 'rgba(0,80,180,0.2)',
       alignItems: 'center',
       justifyContent: 'center',
