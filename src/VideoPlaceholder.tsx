@@ -24,7 +24,7 @@ const VideoPlaceholder = (props: VideoPlaceholderProps) => {
       <FontAwesomeIcon
         data-testid='icon'
         icon='fa-solid fa-circle-user'
-        fontSize={120}
+        fontSize={80}
         color='#C4C4C4'
       />
       {props.isShown && (
@@ -55,7 +55,8 @@ const style = {
     display: 'flex',
     backgroundColor: '#007bff33',
     flexDirection: 'row',
-    position: 'relative'
+    position: 'relative',
+    alignItems: 'center'
   } as React.CSSProperties,
   imgContainer: {
     flex: 10,

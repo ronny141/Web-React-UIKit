@@ -1243,7 +1243,7 @@ var VideoPlaceholder = function VideoPlaceholder(props) {
   }, React__default.createElement(reactFontawesome.FontAwesomeIcon, {
     "data-testid": 'icon',
     icon: 'fa-solid fa-circle-user',
-    fontSize: 120,
+    fontSize: 80,
     color: '#C4C4C4'
   }), props.isShown && React__default.createElement("div", {
     style: _extends({}, style.btnContainer, maxViewOverlayContainer)
@@ -1262,7 +1262,8 @@ var style = {
     display: 'flex',
     backgroundColor: '#007bff33',
     flexDirection: 'row',
-    position: 'relative'
+    position: 'relative',
+    alignItems: 'center'
   },
   imgContainer: {
     flex: 10,
