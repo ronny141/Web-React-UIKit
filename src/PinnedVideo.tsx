@@ -74,7 +74,6 @@ const PinnedVideo: React.FC = () => {
         className={styles.scrollbar}
         style={{
           ...{
-            overflow: 'auto',
             display: 'flex',
             flex: 1,
             flexDirection: isLandscape ? 'column' : 'row',

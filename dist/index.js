@@ -1534,7 +1534,6 @@ var PinnedVideo = function PinnedVideo() {
   })), React__default.createElement("div", {
     className: styles$2.scrollbar,
     style: _extends({}, {
-      overflow: 'auto',
       display: 'flex',
       flex: 1,
       flexDirection: isLandscape ? 'column' : 'row',
