@@ -4,7 +4,7 @@ import { MaxUidConsumer } from './MaxUidContext'
 import MaxVideoView from './MaxVideoView'
 import MinVideoView from './MinVideoView'
 import PropsContext from './PropsContext'
-import styles from './styles.module.css'
+// import styles from './styles.module.css'
 
 /**
  * React Component to render the user videos in the pinned/spotlight layout
@@ -71,9 +71,11 @@ const PinnedVideo: React.FC = () => {
         </MaxUidConsumer>
       </div>
       <div
-        className={styles.scrollbar}
+        // className={styles.scrollbar}
         style={{
           ...{
+            overflowY: 'hidden',
+            overflowX: 'hidden',
             display: 'flex',
             flex: 1,
             flexDirection: isLandscape ? 'column' : 'row',

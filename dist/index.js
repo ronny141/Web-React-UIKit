@@ -1470,8 +1470,6 @@ var MinVideoView = function MinVideoView(props) {
   }));
 };
 
-var styles$2 = {"test":"_3ybTi","scrollbar":"_3Sxu7"};
-
 var PinnedVideo = function PinnedVideo() {
   var _useContext = React.useContext(PropsContext),
       styleProps = _useContext.styleProps,
@@ -1532,8 +1530,9 @@ var PinnedVideo = function PinnedVideo() {
       user: maxUsers[0]
     });
   })), React__default.createElement("div", {
-    className: styles$2.scrollbar,
     style: _extends({}, {
+      overflowY: 'hidden',
+      overflowX: 'hidden',
       display: 'flex',
       flex: 1,
       flexDirection: isLandscape ? 'column' : 'row',
@@ -2141,7 +2140,7 @@ function PopUp() {
 
   var local = React.useContext(LocalContext);
   return popUpState !== exports.popUpStateEnum.closed ? React__default.createElement("div", {
-    style: _extends({}, styles$3.container, popUpContainer)
+    style: _extends({}, styles$2.container, popUpContainer)
   }, React__default.createElement("div", {
     style: {
       color: '#fff',
@@ -2177,16 +2176,16 @@ function PopUp() {
 
       setPopUpState(exports.popUpStateEnum.closed);
     },
-    style: styles$3.button
+    style: styles$2.button
   }, "Confirm"), React__default.createElement("div", {
-    style: styles$3.buttonClose,
+    style: styles$2.buttonClose,
     onClick: function onClick() {
       return setPopUpState(exports.popUpStateEnum.closed);
     }
   }, "Close"))) : null;
 }
 
-var styles$3 = {
+var styles$2 = {
   button: {
     color: '#fff',
     cursor: 'pointer',
