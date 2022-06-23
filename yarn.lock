@@ -2269,10 +2269,10 @@ aggregate-error@^3.0.0:
     clean-stack "^2.0.0"
     indent-string "^4.0.0"
 
-agora-rtc-react@^1.1.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/agora-rtc-react/-/agora-rtc-react-1.1.3.tgz#616527fe453b95fdd8f6e39ccba86496ecdbb686"
-  integrity sha512-AgmDoeLoL3xC7u60lTehHi1GvHsP8l09CX3bn+NyHx6E0Dmbbxdtqkn+YrlakWa4IYOAn0d/9oKvuGrNtUiOpA==
+agora-rtc-react@^1.1.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/agora-rtc-react/-/agora-rtc-react-1.1.1.tgz#3216349cc9e5f13a4b6a51db2aec0cac680fb2dc"
+  integrity sha512-0KTgAlVNEFyM6WH2F0Xxa+JhvP+erh0/7mCT7455TF6Wsnu83SKXtD7E8n6s3YsHdwciZfvUntQ9/ApRmipl+w==
   dependencies:
     agora-rtc-sdk-ng "^4.3.0"
 
